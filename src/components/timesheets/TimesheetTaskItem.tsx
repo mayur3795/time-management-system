@@ -44,7 +44,7 @@ export function TimesheetTaskItem({
           {entry.hours} {entry.hours === 1 ? 'hr' : 'hrs'}
         </span>
 
-        <span className="text-xs font-normal text-[#1B64F2] hover:underline whitespace-nowrap">
+        <span className="inline-flex items-center rounded-xl bg-[#E1EFFE] px-3.5 py-1 text-xs sm:text-sm font-medium text-[#1E429F] whitespace-nowrap">
           {entry.projectName}
         </span>
 
