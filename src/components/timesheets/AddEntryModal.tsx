@@ -137,7 +137,7 @@ export function AddEntryModal({
             size="icon"
             onClick={onClose}
             aria-label="Close dialog"
-            className="text-slate-400 hover:text-slate-600"
+            className="text-slate-500 hover:text-slate-700 min-h-[36px] min-w-[36px]"
           >
             <X className="h-5 w-5" />
           </Button>
@@ -254,7 +254,7 @@ export function AddEntryModal({
                   : 'border-slate-200 focus:border-blue-500 focus:ring-blue-500/20'
               }`}
             />
-            <p className="mt-1 text-[11px] text-slate-400">A note for extra info</p>
+            <p className="mt-1 text-[11px] text-slate-600">A note for extra info</p>
             {errors.description && (
               <p className="mt-1 text-xs text-red-600">{errors.description}</p>
             )}

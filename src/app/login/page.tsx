@@ -23,7 +23,7 @@ export default async function LoginPage() {
 
         <LoginForm />
 
-        <div className="mt-8 text-center text-xs text-slate-400 md:hidden">
+        <div className="mt-8 text-center text-xs text-slate-600 md:hidden">
           © 2024 tentwenty. All rights reserved.
         </div>
       </div>

@@ -57,6 +57,7 @@ export function Header() {
             type="button"
             id="userMenuButton"
             variant="ghost"
+            aria-label="User profile menu"
             aria-expanded={dropdownOpen}
             aria-haspopup="true"
             onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -72,6 +73,7 @@ export function Header() {
             <span
               className="inline-block h-2 w-2 rounded-full bg-[#10B981] ring-2 ring-white"
               title="Online"
+              aria-hidden="true"
             />
           </Button>
 
@@ -83,9 +85,9 @@ export function Header() {
               className="absolute right-0 mt-2 w-56 origin-top-right rounded-xl border border-slate-100 bg-white p-1.5 shadow-lg ring-1 ring-black/5 focus:outline-none z-50 animate-in fade-in-50 zoom-in-95 duration-100"
             >
               <div className="border-b border-slate-100 px-3 py-2.5">
-                <p className="text-xs font-medium text-slate-400">Signed in as</p>
+                <p className="text-xs font-medium text-slate-600">Signed in as</p>
                 <p className="truncate text-sm font-semibold text-slate-900">{userName}</p>
-                <p className="truncate text-xs text-slate-500">{userEmail}</p>
+                <p className="truncate text-xs text-slate-600">{userEmail}</p>
               </div>
 
               <div className="p-1">

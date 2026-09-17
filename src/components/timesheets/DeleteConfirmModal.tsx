@@ -53,8 +53,8 @@ export function DeleteConfirmModal({
             variant="ghost"
             size="icon"
             onClick={onClose}
-            aria-label="Close"
-            className="text-slate-400 hover:text-slate-600"
+            aria-label="Close dialog"
+            className="text-slate-500 hover:text-slate-700 min-h-[36px] min-w-[36px]"
           >
             <X className="h-4 w-4" />
           </Button>
@@ -66,7 +66,7 @@ export function DeleteConfirmModal({
 
         <div className="rounded-lg bg-slate-50 border border-slate-200/80 p-3 mb-5 text-xs text-slate-700">
           <p className="font-semibold text-slate-900 truncate">{entry.description}</p>
-          <p className="text-slate-500 mt-0.5">
+          <p className="text-slate-600 mt-0.5">
             {entry.hours} {entry.hours === 1 ? 'hr' : 'hrs'} • {entry.projectName}
           </p>
         </div>

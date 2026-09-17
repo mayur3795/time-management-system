@@ -10,11 +10,11 @@ export function TimesheetStatusBadge({ status, className = '' }: TimesheetStatus
   const getBadgeStyles = (status: TimesheetStatus) => {
     switch (status) {
       case 'COMPLETED':
-        return 'bg-[#ECFDF5] text-[#059669] border-[#A7F3D0]';
+        return 'bg-[#ECFDF5] text-[#047857] border-[#A7F3D0]';
       case 'INCOMPLETE':
-        return 'bg-[#FEF3C7] text-[#D97706] border-[#FDE68A]';
+        return 'bg-[#FEF3C7] text-[#92400E] border-[#FDE68A]';
       case 'MISSING':
-        return 'bg-[#FFE4E6] text-[#E11D48] border-[#FECDD3]';
+        return 'bg-[#FFE4E6] text-[#BE123C] border-[#FECDD3]';
       default:
         return 'bg-slate-100 text-slate-700 border-slate-200';
     }

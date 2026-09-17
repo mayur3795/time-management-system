@@ -20,10 +20,17 @@ export function WeeklyProgressBar({
   };
 
   return (
-    <div className="w-48 sm:w-56 text-right">
+    <div
+      className="w-48 sm:w-56 text-right"
+      role="progressbar"
+      aria-valuenow={totalHours}
+      aria-valuemin={0}
+      aria-valuemax={targetHours}
+      aria-label="Weekly hours progress"
+    >
       <div className="flex items-center justify-between text-xs font-semibold mb-1 text-slate-800">
         <span>{totalHours}/{targetHours} hrs</span>
-        <span className="text-slate-500 font-normal">{percentage}%</span>
+        <span className="text-slate-600 font-normal">{percentage}%</span>
       </div>
       <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
         <div

@@ -106,14 +106,17 @@ export function TimesheetFilters({
           id="dateRangeFilterButton"
           variant="secondary"
           size="sm"
+          aria-label="Filter timesheets by date range"
+          aria-haspopup="true"
+          aria-expanded={dateDropdownOpen}
           onClick={() => {
             setDateDropdownOpen(!dateDropdownOpen);
             setStatusDropdownOpen(false);
           }}
-          leftIcon={<Calendar className="h-4 w-4 text-slate-400" />}
+          leftIcon={<Calendar className="h-4 w-4 text-slate-500" />}
           rightIcon={
             <ChevronDown
-              className={`h-3.5 w-3.5 text-slate-400 transition-transform ${
+              className={`h-3.5 w-3.5 text-slate-500 transition-transform ${
                 dateDropdownOpen ? 'rotate-180' : ''
               }`}
             />
@@ -137,7 +140,7 @@ export function TimesheetFilters({
                   variant="link"
                   size="sm"
                   onClick={() => handleSelectPreset(undefined, undefined)}
-                  className="text-[11px] text-blue-600"
+                  className="text-[11px] text-blue-700 font-medium"
                 >
                   Clear
                 </Button>
@@ -176,11 +179,12 @@ export function TimesheetFilters({
             </div>
 
             <div className="border-t border-slate-100 pt-3">
-              <p className="text-[11px] font-medium text-slate-500 mb-2">Custom Range</p>
+              <p className="text-[11px] font-semibold text-slate-700 mb-2">Custom Range</p>
               <div className="space-y-2">
                 <div>
-                  <label className="block text-[11px] text-slate-500">From</label>
+                  <label htmlFor="customStartDate" className="block text-[11px] font-medium text-slate-600 mb-1">From</label>
                   <input
+                    id="customStartDate"
                     type="date"
                     value={customStart}
                     onChange={(e) => setCustomStart(e.target.value)}
@@ -188,8 +192,9 @@ export function TimesheetFilters({
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] text-slate-500">To</label>
+                  <label htmlFor="customEndDate" className="block text-[11px] font-medium text-slate-600 mb-1">To</label>
                   <input
+                    id="customEndDate"
                     type="date"
                     value={customEnd}
                     onChange={(e) => setCustomEnd(e.target.value)}
@@ -218,13 +223,16 @@ export function TimesheetFilters({
           id="statusFilterButton"
           variant="secondary"
           size="sm"
+          aria-label="Filter timesheets by status"
+          aria-haspopup="true"
+          aria-expanded={statusDropdownOpen}
           onClick={() => {
             setStatusDropdownOpen(!statusDropdownOpen);
             setDateDropdownOpen(false);
           }}
           rightIcon={
             <ChevronDown
-              className={`h-3.5 w-3.5 text-slate-400 transition-transform ${
+              className={`h-3.5 w-3.5 text-slate-500 transition-transform ${
                 statusDropdownOpen ? 'rotate-180' : ''
               }`}
             />

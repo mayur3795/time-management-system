@@ -53,9 +53,11 @@ export function TimesheetTaskItem({
           <Button
             variant="ghost"
             size="icon"
-            aria-label="Actions"
+            aria-label="Task actions"
+            aria-haspopup="true"
+            aria-expanded={menuOpen}
             onClick={() => setMenuOpen(!menuOpen)}
-            className="text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+            className="text-slate-500 hover:text-slate-800 hover:bg-slate-100 min-h-[36px] min-w-[36px]"
           >
             <MoreHorizontal className="h-4 w-4" />
           </Button>

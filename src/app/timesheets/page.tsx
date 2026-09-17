@@ -151,20 +151,32 @@ export default function TimesheetsDashboardPage() {
               onResetFilters={handleResetFilters}
             />
 
-            {/* Pagination footer */}
-            {!isLoading && timesheets.length > 0 && (
-              <Pagination
-                currentPage={page}
-                totalPages={totalPages}
-                limit={limit}
-                totalItems={totalItems}
-                onPageChange={(newPage) => setPage(newPage)}
-                onLimitChange={(newLimit) => {
-                  setLimit(newLimit);
-                  setPage(1);
-                }}
-              />
-            )}
+            {/* Pagination footer with persistent border and placeholder to eliminate CLS */}
+            <div className="mt-4 pt-6 border-t border-slate-100 min-h-[64px]">
+              {isLoading ? (
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 animate-pulse">
+                  <div className="h-8 w-28 bg-slate-100 rounded-lg" />
+                  <div className="flex items-center gap-1">
+                    <div className="h-8 w-16 bg-slate-100 rounded-md" />
+                    <div className="h-8 w-8 bg-slate-100 rounded-md" />
+                    <div className="h-8 w-8 bg-slate-100 rounded-md" />
+                    <div className="h-8 w-16 bg-slate-100 rounded-md" />
+                  </div>
+                </div>
+              ) : timesheets.length > 0 ? (
+                <Pagination
+                  currentPage={page}
+                  totalPages={totalPages}
+                  limit={limit}
+                  totalItems={totalItems}
+                  onPageChange={(newPage) => setPage(newPage)}
+                  onLimitChange={(newLimit) => {
+                    setLimit(newLimit);
+                    setPage(1);
+                  }}
+                />
+              ) : null}
+            </div>
           </div>
         </div>
       </main>

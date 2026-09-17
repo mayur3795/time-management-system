@@ -176,7 +176,7 @@ export default function TimesheetDetailPage() {
           <div className="mb-4">
             <Link
               href="/timesheets"
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 transition-colors"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>Back to Timesheets</span>
@@ -191,7 +191,7 @@ export default function TimesheetDetailPage() {
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0F172A]">
                   This week&apos;s timesheet
                 </h1>
-                <p className="text-xs text-slate-400 font-normal mt-1">
+                <p className="text-xs text-slate-600 font-normal mt-1">
                   {formatTimesheetDateRange(timesheet.startDate, timesheet.endDate)}
                 </p>
               </div>
