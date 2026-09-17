@@ -4,7 +4,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { ChevronDown, LogOut, User as UserIcon } from 'lucide-react';
+import { ChevronDown, LogOut } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 
 export function Header() {
   const pathname = usePathname();
@@ -52,13 +53,14 @@ export function Header() {
 
         {/* Right: User profile with dropdown & online indicator */}
         <div className="relative" ref={dropdownRef}>
-          <button
+          <Button
             type="button"
             id="userMenuButton"
+            variant="ghost"
             aria-expanded={dropdownOpen}
             aria-haspopup="true"
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center gap-2 rounded-lg p-1.5 text-sm text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer"
+            className="p-1.5 text-sm text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 gap-2"
           >
             <span className="font-medium text-slate-800">{userName}</span>
             <ChevronDown
@@ -66,8 +68,12 @@ export function Header() {
                 dropdownOpen ? 'rotate-180' : ''
               }`}
             />
-          
-          </button>
+            {/* Green online dot */}
+            <span
+              className="inline-block h-2 w-2 rounded-full bg-[#10B981] ring-2 ring-white"
+              title="Online"
+            />
+          </Button>
 
           {/* User dropdown */}
           {dropdownOpen && (
@@ -83,16 +89,18 @@ export function Header() {
               </div>
 
               <div className="p-1">
-                <button
+                <Button
                   type="button"
                   id="signOutButton"
+                  variant="ghost"
+                  size="sm"
                   role="menuitem"
                   onClick={() => signOut({ callbackUrl: '/login' })}
-                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-xs md:text-sm text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                  className="w-full justify-start text-rose-600 hover:bg-rose-50 hover:text-rose-700 font-normal gap-2"
+                  leftIcon={<LogOut className="h-4 w-4 shrink-0 text-rose-500" />}
                 >
-                  <LogOut className="h-4 w-4 shrink-0 text-rose-500" />
                   <span>Sign out</span>
-                </button>
+                </Button>
               </div>
             </div>
           )}

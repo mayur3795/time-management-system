@@ -3,7 +3,8 @@
 import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Loader2, AlertCircle, Info } from 'lucide-react';
+import { AlertCircle, Info } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 
 export function LoginForm() {
   const router = useRouter();
@@ -88,13 +89,15 @@ export function LoginForm() {
             </p>
           </div>
         </div>
-        <button
+        <Button
           type="button"
+          variant="secondary"
+          size="sm"
           onClick={handleFillDemo}
-          className="shrink-0 rounded bg-white px-2 py-1 text-[11px] font-medium text-blue-700 shadow-sm border border-blue-200 hover:bg-blue-50"
+          className="shrink-0 text-[11px] font-medium text-blue-700 hover:bg-blue-50 py-1 px-2"
         >
           Auto Fill
-        </button>
+        </Button>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5" noValidate>
@@ -152,21 +155,15 @@ export function LoginForm() {
           </label>
         </div>
 
-        <button
+        <Button
           type="submit"
           id="signInButton"
-          disabled={isLoading}
-          className="w-full flex items-center justify-center gap-2 rounded-lg bg-[#1B64F2] px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-[#1557D0] active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed transition-all"
+          variant="primary"
+          isLoading={isLoading}
+          className="w-full"
         >
-          {isLoading ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Signing in...</span>
-            </>
-          ) : (
-            <span>Sign in</span>
-          )}
-        </button>
+          Sign in
+        </Button>
       </form>
     </div>
   );

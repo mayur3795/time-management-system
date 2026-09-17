@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { ChevronDown } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 
 interface PaginationProps {
   currentPage: number;
@@ -28,7 +29,6 @@ export function Pagination({
         pages.push(i);
       }
     } else {
-      // In screenshot: 1, 2, 3, 4, 5, 6, 7, 8, ..., 99
       if (currentPage <= 4) {
         pages.push(1, 2, 3, 4, 5, '...', totalPages);
       } else if (currentPage >= totalPages - 3) {
@@ -61,14 +61,16 @@ export function Pagination({
 
       {/* Page Navigation */}
       <div className="flex items-center gap-1">
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
-          className="rounded-md px-3 py-1.5 text-xs md:text-sm text-slate-600 hover:text-slate-900 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="text-slate-600 hover:text-slate-900"
         >
           Previous
-        </button>
+        </Button>
 
         <div className="flex items-center gap-1">
           {getPageNumbers().map((p, idx) => {
@@ -84,30 +86,34 @@ export function Pagination({
             const isActive = pageNum === currentPage;
 
             return (
-              <button
+              <Button
                 key={`page-${pageNum}`}
                 type="button"
+                variant={isActive ? 'secondary' : 'ghost'}
+                size="sm"
                 onClick={() => onPageChange(pageNum)}
-                className={`min-w-[32px] h-8 rounded-md text-xs md:text-sm font-medium transition-all ${
+                className={`min-w-[32px] h-8 font-medium ${
                   isActive
                     ? 'border border-[#1B64F2] text-[#1B64F2] bg-blue-50/20'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 {pageNum}
-              </button>
+              </Button>
             );
           })}
         </div>
 
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          className="rounded-md px-3 py-1.5 text-xs md:text-sm text-slate-600 hover:text-slate-900 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="text-slate-600 hover:text-slate-900"
         >
           Next
-        </button>
+        </Button>
       </div>
     </div>
   );

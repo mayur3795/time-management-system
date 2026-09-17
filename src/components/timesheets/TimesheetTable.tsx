@@ -6,6 +6,7 @@ import { ChevronsUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { Timesheet } from '@/types/timesheet';
 import { TimesheetStatusBadge } from './TimesheetStatusBadge';
 import { formatTimesheetDateRange } from '@/lib/utils/date';
+import { Button } from '@/components/ui/Button';
 
 type SortField = 'weekNumber' | 'startDate' | 'status';
 type SortOrder = 'asc' | 'desc';
@@ -95,13 +96,15 @@ export function TimesheetTable({
             No timesheets match your current date range or status filters.
           </p>
           {onResetFilters && (
-            <button
+            <Button
               type="button"
+              variant="secondary"
+              size="sm"
               onClick={onResetFilters}
-              className="rounded-lg bg-blue-50 px-4 py-2 text-xs font-medium text-blue-600 hover:bg-blue-100 transition-colors"
+              className="bg-blue-50 text-blue-600 hover:bg-blue-100 border-transparent"
             >
               Clear filters
-            </button>
+            </Button>
           )}
         </div>
       </div>

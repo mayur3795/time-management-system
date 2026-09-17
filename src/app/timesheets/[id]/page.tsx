@@ -10,6 +10,7 @@ import { WeeklyProgressBar } from '@/components/timesheets/WeeklyProgressBar';
 import { TimesheetTaskItem } from '@/components/timesheets/TimesheetTaskItem';
 import { AddEntryModal } from '@/components/timesheets/AddEntryModal';
 import { DeleteConfirmModal } from '@/components/timesheets/DeleteConfirmModal';
+import { Button } from '@/components/ui/Button';
 import {
   getTimesheet,
   getProjects,
@@ -229,18 +230,19 @@ export default function TimesheetDetailPage() {
                       ))}
 
                       {/* Add new task button */}
-                      <button
+                      <Button
                         type="button"
+                        variant={isFirstDay && dayEntries.length === 0 ? 'secondary' : 'outline'}
                         onClick={() => handleOpenAddModal(dayDate)}
-                        className={`w-full flex items-center justify-center gap-2 rounded-lg py-2.5 text-xs md:text-sm font-medium transition-all cursor-pointer ${
+                        leftIcon={<Plus className="h-4 w-4" />}
+                        className={`w-full py-2.5 text-xs md:text-sm font-medium ${
                           isFirstDay && dayEntries.length === 0
-                            ? 'border border-blue-200 bg-blue-50/50 text-[#1B64F2] hover:bg-blue-50'
-                            : 'border border-slate-200 text-slate-500 hover:border-blue-300 hover:bg-blue-50/20 hover:text-[#1B64F2]'
+                            ? 'border-blue-200 bg-blue-50/50 text-[#1B64F2] hover:bg-blue-50'
+                            : 'border-slate-200 text-slate-500 hover:border-blue-300 hover:bg-blue-50/20 hover:text-[#1B64F2]'
                         }`}
                       >
-                        <Plus className="h-4 w-4" />
-                        <span>Add new task</span>
-                      </button>
+                        Add new task
+                      </Button>
                     </div>
                   </div>
                 );

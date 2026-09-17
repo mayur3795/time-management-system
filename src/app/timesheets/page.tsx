@@ -9,6 +9,7 @@ import { Pagination } from '@/components/timesheets/Pagination';
 import { getTimesheets } from '@/lib/api/client';
 import { Timesheet, TimesheetStatus } from '@/types/timesheet';
 import { AlertCircle } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 
 export default function TimesheetsDashboardPage() {
   const [timesheets, setTimesheets] = useState<Timesheet[]>([]);
@@ -128,13 +129,15 @@ export default function TimesheetsDashboardPage() {
                   <AlertCircle className="h-4 w-4 shrink-0 text-red-500" />
                   <span>{error}</span>
                 </div>
-                <button
+                <Button
                   type="button"
+                  variant="link"
+                  size="sm"
                   onClick={fetchTimesheets}
-                  className="font-medium text-red-700 underline hover:text-red-800"
+                  className="font-medium text-red-700 hover:text-red-800"
                 >
                   Retry
-                </button>
+                </Button>
               </div>
             )}
 

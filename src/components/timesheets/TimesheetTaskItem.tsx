@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MoreHorizontal } from 'lucide-react';
 import { TimesheetEntry } from '@/types/timesheet';
+import { Button } from '@/components/ui/Button';
 
 interface TimesheetTaskItemProps {
   entry: TimesheetEntry;
@@ -49,43 +50,46 @@ export function TimesheetTaskItem({
 
         {/* 3-dots action menu */}
         <div className="relative" ref={menuRef}>
-          <button
-            type="button"
+          <Button
+            variant="ghost"
+            size="icon"
             aria-label="Actions"
             onClick={() => setMenuOpen(!menuOpen)}
-            className="flex h-7 w-7 items-center justify-center rounded text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer"
+            className="text-slate-400 hover:text-slate-700 hover:bg-slate-100"
           >
             <MoreHorizontal className="h-4 w-4" />
-          </button>
+          </Button>
 
           {menuOpen && (
             <div
               role="menu"
               className="absolute right-0 top-full mt-1 w-28 rounded-lg border border-slate-100 bg-white p-1 shadow-lg ring-1 ring-black/5 z-30 animate-in fade-in-50 zoom-in-95"
             >
-              <button
-                type="button"
+              <Button
+                variant="ghost"
+                size="sm"
                 role="menuitem"
                 onClick={() => {
                   setMenuOpen(false);
                   onEdit(entry);
                 }}
-                className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-xs text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                className="w-full justify-start rounded px-2.5 py-1.5 text-xs text-slate-700 hover:bg-slate-50 font-normal"
               >
                 <span>Edit</span>
-              </button>
+              </Button>
 
-              <button
-                type="button"
+              <Button
+                variant="ghost"
+                size="sm"
                 role="menuitem"
                 onClick={() => {
                   setMenuOpen(false);
                   onDelete(entry);
                 }}
-                className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-xs text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                className="w-full justify-start rounded px-2.5 py-1.5 text-xs text-red-600 hover:bg-red-50 hover:text-red-700 font-normal"
               >
                 <span>Delete</span>
-              </button>
+              </Button>
             </div>
           )}
         </div>

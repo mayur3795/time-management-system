@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronDown, Calendar, X, RotateCcw } from 'lucide-react';
+import { ChevronDown, Calendar, RotateCcw } from 'lucide-react';
 import { TimesheetStatus } from '@/types/timesheet';
+import { Button } from '@/components/ui/Button';
 
 interface TimesheetFiltersProps {
   startDate?: string;
@@ -100,66 +101,78 @@ export function TimesheetFilters({
     <div className="flex flex-wrap items-center gap-3">
       {/* Date Range Dropdown */}
       <div className="relative" ref={dateRef}>
-        <button
+        <Button
           type="button"
           id="dateRangeFilterButton"
+          variant="secondary"
+          size="sm"
           onClick={() => {
             setDateDropdownOpen(!dateDropdownOpen);
             setStatusDropdownOpen(false);
           }}
-          className={`flex items-center gap-2 rounded-lg border px-3.5 py-2 text-xs md:text-sm font-normal transition-colors ${
+          leftIcon={<Calendar className="h-4 w-4 text-slate-400" />}
+          rightIcon={
+            <ChevronDown
+              className={`h-3.5 w-3.5 text-slate-400 transition-transform ${
+                dateDropdownOpen ? 'rotate-180' : ''
+              }`}
+            />
+          }
+          className={`py-2 px-3.5 font-normal ${
             startDate || endDate
               ? 'border-blue-500 bg-blue-50/40 text-blue-700 font-medium'
-              : 'border-[#E2E8F0] bg-white text-slate-700 hover:bg-slate-50'
+              : 'text-slate-700'
           }`}
         >
-          <Calendar className="h-4 w-4 text-slate-400" />
           <span>{getDateRangeLabel()}</span>
-          <ChevronDown
-            className={`h-3.5 w-3.5 text-slate-400 transition-transform ${
-              dateDropdownOpen ? 'rotate-180' : ''
-            }`}
-          />
-        </button>
+        </Button>
 
         {dateDropdownOpen && (
           <div className="absolute left-0 mt-2 w-72 rounded-xl border border-slate-200 bg-white p-4 shadow-xl z-40 animate-in fade-in-50 zoom-in-95">
             <div className="mb-3 flex items-center justify-between border-b border-slate-100 pb-2">
               <span className="text-xs font-semibold text-slate-800">Filter by Date</span>
               {(startDate || endDate) && (
-                <button
+                <Button
                   type="button"
+                  variant="link"
+                  size="sm"
                   onClick={() => handleSelectPreset(undefined, undefined)}
-                  className="text-[11px] text-blue-600 hover:underline"
+                  className="text-[11px] text-blue-600"
                 >
                   Clear
-                </button>
+                </Button>
               )}
             </div>
 
             {/* Presets */}
             <div className="mb-3 space-y-1">
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="sm"
                 onClick={() => handleSelectPreset('2024-01-01', '2024-01-31')}
-                className="w-full text-left rounded-md px-2.5 py-1.5 text-xs text-slate-700 hover:bg-slate-50"
+                className="w-full justify-start text-xs font-normal text-slate-700"
               >
                 January 2024 (Weeks 1 - 5)
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                variant="ghost"
+                size="sm"
                 onClick={() => handleSelectPreset('2024-02-01', '2024-02-29')}
-                className="w-full text-left rounded-md px-2.5 py-1.5 text-xs text-slate-700 hover:bg-slate-50"
+                className="w-full justify-start text-xs font-normal text-slate-700"
               >
                 February 2024 (Weeks 5 - 9)
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                variant="ghost"
+                size="sm"
                 onClick={() => handleSelectPreset('2024-01-01', '2024-02-29')}
-                className="w-full text-left rounded-md px-2.5 py-1.5 text-xs text-slate-700 hover:bg-slate-50"
+                className="w-full justify-start text-xs font-normal text-slate-700"
               >
                 All Available (Jan - Feb 2024)
-              </button>
+              </Button>
             </div>
 
             <div className="border-t border-slate-100 pt-3">
@@ -183,13 +196,15 @@ export function TimesheetFilters({
                     className="w-full rounded-md border border-slate-200 px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
-                <button
+                <Button
                   type="button"
+                  variant="primary"
+                  size="sm"
                   onClick={handleApplyCustomDates}
-                  className="w-full mt-2 rounded-md bg-[#1B64F2] py-1.5 text-xs font-medium text-white hover:bg-blue-700"
+                  className="w-full mt-2"
                 >
                   Apply Range
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -198,42 +213,48 @@ export function TimesheetFilters({
 
       {/* Status Dropdown */}
       <div className="relative" ref={statusRef}>
-        <button
+        <Button
           type="button"
           id="statusFilterButton"
+          variant="secondary"
+          size="sm"
           onClick={() => {
             setStatusDropdownOpen(!statusDropdownOpen);
             setDateDropdownOpen(false);
           }}
-          className={`flex items-center gap-2 rounded-lg border px-3.5 py-2 text-xs md:text-sm font-normal transition-colors ${
+          rightIcon={
+            <ChevronDown
+              className={`h-3.5 w-3.5 text-slate-400 transition-transform ${
+                statusDropdownOpen ? 'rotate-180' : ''
+              }`}
+            />
+          }
+          className={`py-2 px-3.5 font-normal ${
             status && status !== 'ALL'
               ? 'border-blue-500 bg-blue-50/40 text-blue-700 font-medium'
-              : 'border-[#E2E8F0] bg-white text-slate-700 hover:bg-slate-50'
+              : 'text-slate-700'
           }`}
         >
           <span>{getStatusLabel()}</span>
-          <ChevronDown
-            className={`h-3.5 w-3.5 text-slate-400 transition-transform ${
-              statusDropdownOpen ? 'rotate-180' : ''
-            }`}
-          />
-        </button>
+        </Button>
 
         {statusDropdownOpen && (
           <div className="absolute left-0 mt-2 w-44 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl z-40 animate-in fade-in-50 zoom-in-95">
             {(['ALL', 'COMPLETED', 'INCOMPLETE', 'MISSING'] as const).map((s) => (
-              <button
+              <Button
                 key={s}
                 type="button"
+                variant="ghost"
+                size="sm"
                 onClick={() => handleSelectStatus(s)}
-                className={`w-full text-left rounded-lg px-3 py-2 text-xs md:text-sm transition-colors ${
+                className={`w-full justify-start text-xs font-normal ${
                   status === s
                     ? 'bg-blue-50 text-blue-700 font-semibold'
-                    : 'text-slate-700 hover:bg-slate-50'
+                    : 'text-slate-700'
                 }`}
               >
                 {s === 'ALL' ? 'All' : s.charAt(0) + s.slice(1).toLowerCase()}
-              </button>
+              </Button>
             ))}
           </div>
         )}
@@ -241,14 +262,16 @@ export function TimesheetFilters({
 
       {/* Reset filters button if active */}
       {hasActiveFilters && (
-        <button
+        <Button
           type="button"
+          variant="secondary"
+          size="sm"
           onClick={onReset}
-          className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100 transition-colors"
+          leftIcon={<RotateCcw className="h-3 w-3" />}
+          className="text-slate-600 hover:text-slate-800"
         >
-          <RotateCcw className="h-3 w-3" />
           <span>Reset</span>
-        </button>
+        </Button>
       )}
     </div>
   );

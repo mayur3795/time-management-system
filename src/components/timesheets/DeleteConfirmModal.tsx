@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Trash2, Loader2, X } from 'lucide-react';
+import { Trash2, X } from 'lucide-react';
 import { TimesheetEntry } from '@/types/timesheet';
+import { Button } from '@/components/ui/Button';
 
 interface DeleteConfirmModalProps {
   isOpen: boolean;
@@ -48,14 +49,15 @@ export function DeleteConfirmModal({
             <Trash2 className="h-5 w-5" />
             <h3 className="text-base font-bold text-slate-900">Delete Entry</h3>
           </div>
-          <button
-            type="button"
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={onClose}
             aria-label="Close"
-            className="rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 cursor-pointer"
+            className="text-slate-400 hover:text-slate-600"
           >
             <X className="h-4 w-4" />
-          </button>
+          </Button>
         </div>
 
         <p className="text-sm text-slate-600 mb-2">
@@ -70,30 +72,25 @@ export function DeleteConfirmModal({
         </div>
 
         <div className="flex items-center justify-end gap-3">
-          <button
+          <Button
             type="button"
+            variant="secondary"
+            size="sm"
             onClick={onClose}
             disabled={isDeleting}
-            className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-xs md:text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
           >
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
             id="confirmDeleteButton"
+            variant="danger"
+            size="sm"
             onClick={handleConfirm}
-            disabled={isDeleting}
-            className="flex items-center gap-1.5 rounded-lg bg-rose-600 px-4 py-2 text-xs md:text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-70 transition-colors cursor-pointer"
+            isLoading={isDeleting}
           >
-            {isDeleting ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" />
-                <span>Deleting...</span>
-              </>
-            ) : (
-              <span>Delete entry</span>
-            )}
-          </button>
+            Delete entry
+          </Button>
         </div>
       </div>
     </div>

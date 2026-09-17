@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Minus, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 
 interface StepperProps {
   value: number;
@@ -41,16 +42,18 @@ export function Stepper({
 
   return (
     <div className="inline-flex items-center rounded-lg border border-slate-200 bg-white shadow-2xs">
-      <button
+      <Button
         type="button"
         id="stepperDecrement"
+        variant="ghost"
+        size="icon"
         onClick={handleDecrement}
         disabled={disabled || value <= min}
         aria-label="Decrease hours"
-        className="flex h-9 w-9 items-center justify-center rounded-l-lg text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+        className="h-9 w-9 rounded-none rounded-l-lg border-0 hover:bg-slate-50 text-slate-600"
       >
         <Minus className="h-3.5 w-3.5" />
-      </button>
+      </Button>
 
       <input
         type="number"
@@ -64,16 +67,18 @@ export function Stepper({
         className="h-9 w-14 border-x border-slate-200 text-center text-sm font-medium text-slate-800 focus:outline-none focus:bg-blue-50/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
       />
 
-      <button
+      <Button
         type="button"
         id="stepperIncrement"
+        variant="ghost"
+        size="icon"
         onClick={handleIncrement}
         disabled={disabled || value >= max}
         aria-label="Increase hours"
-        className="flex h-9 w-9 items-center justify-center rounded-r-lg text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+        className="h-9 w-9 rounded-none rounded-r-lg border-0 hover:bg-slate-50 text-slate-600"
       >
         <Plus className="h-3.5 w-3.5" />
-      </button>
+      </Button>
     </div>
   );
 }

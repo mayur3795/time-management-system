@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, Info, Loader2, AlertCircle } from 'lucide-react';
+import { X, Info, AlertCircle } from 'lucide-react';
 import { Project } from '@/types/project';
 import { TimesheetEntry, WorkType } from '@/types/timesheet';
 import { Stepper } from '@/components/ui/Stepper';
+import { Button } from '@/components/ui/Button';
 
 interface AddEntryModalProps {
   isOpen: boolean;
@@ -131,14 +132,15 @@ export function AddEntryModal({
           <h2 id="modalTitle" className="text-lg md:text-xl font-bold text-[#0F172A]">
             {isEditing ? 'Edit Entry' : 'Add New Entry'}
           </h2>
-          <button
-            type="button"
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={onClose}
             aria-label="Close dialog"
-            className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors cursor-pointer"
+            className="text-slate-400 hover:text-slate-600"
           >
             <X className="h-5 w-5" />
-          </button>
+          </Button>
         </div>
 
         {apiError && (
@@ -282,31 +284,26 @@ export function AddEntryModal({
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row items-center gap-3 pt-4 border-t border-slate-100">
-            <button
+            <Button
               type="submit"
               id="submitEntryButton"
-              disabled={isSubmitting}
-              className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 rounded-lg bg-[#1B64F2] px-6 py-2.5 text-sm font-medium text-white shadow-xs hover:bg-[#1557D0] disabled:opacity-70 transition-colors cursor-pointer"
+              variant="primary"
+              isLoading={isSubmitting}
+              className="w-full sm:w-auto flex-1"
             >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>{isEditing ? 'Updating...' : 'Adding...'}</span>
-                </>
-              ) : (
-                <span>{isEditing ? 'Update entry' : 'Add entry'}</span>
-              )}
-            </button>
+              {isEditing ? 'Update entry' : 'Add entry'}
+            </Button>
 
-            <button
+            <Button
               type="button"
               id="cancelEntryButton"
+              variant="secondary"
               onClick={onClose}
               disabled={isSubmitting}
-              className="w-full sm:w-auto rounded-lg border border-slate-200 bg-white px-6 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+              className="w-full sm:w-auto"
             >
               Cancel
-            </button>
+            </Button>
           </div>
         </form>
       </div>
