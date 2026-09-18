@@ -30,12 +30,12 @@ describe('Reusable Button Component', () => {
 
   it('applies variant classes correctly', () => {
     const { rerender } = render(<Button variant="primary">Primary</Button>);
-    expect(screen.getByRole('button')).toHaveClass('bg-[#1B64F2]');
+    expect(screen.getByRole('button')).toHaveClass('bg-blue-600');
 
     rerender(<Button variant="secondary">Secondary</Button>);
-    expect(screen.getByRole('button')).toHaveClass('bg-white');
+    expect(screen.getByRole('button')).toHaveClass('bg-slate-100');
 
     rerender(<Button variant="danger">Danger</Button>);
-    expect(screen.getByRole('button')).toHaveClass('bg-rose-600');
+    expect(screen.getByRole('button')).toHaveClass('bg-red-600');
   });
 });

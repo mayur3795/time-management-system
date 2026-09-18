@@ -28,10 +28,10 @@ export function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-30 w-full border-b border-[#E5E7EB] bg-white">
+    <header className="sticky top-0 z-30 w-full bg-white">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-3.5 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4 sm:gap-8">
-          <Link href="/timesheets" className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500/20 rounded">
+          <Link href="/timesheets" className="flex items-center gap-2 outline-none select-none">
             <span className="text-xl font-bold tracking-tight text-[#0F172A]">
               ticktock
             </span>

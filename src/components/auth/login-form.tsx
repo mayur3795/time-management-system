@@ -80,7 +80,7 @@ export function LoginForm() {
         <div>
           <label
             htmlFor="email"
-            className="block text-xs md:text-sm font-medium text-slate-700 mb-1.5"
+            className="block text-xs md:text-sm font-semibold text-slate-900 mb-1.5"
           >
             Email
           </label>
@@ -96,7 +96,7 @@ export function LoginForm() {
             }}
             placeholder="name@example.com"
             disabled={isLoading}
-            className={`w-full rounded-md border bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 shadow-xs focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:bg-slate-50 transition-colors ${
+            className={`w-full rounded-md border bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-600 shadow-xs focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:bg-slate-50 transition-colors ${
               fieldErrors.email
                 ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
                 : 'border-slate-200 focus:border-blue-500 focus:ring-blue-500/20'
@@ -110,7 +110,7 @@ export function LoginForm() {
         <div>
           <label
             htmlFor="password"
-            className="block text-xs md:text-sm font-medium text-slate-700 mb-1.5"
+            className="block text-xs md:text-sm font-semibold text-slate-900 mb-1.5"
           >
             Password
           </label>
@@ -126,7 +126,7 @@ export function LoginForm() {
             }}
             placeholder="•••••••••"
             disabled={isLoading}
-            className={`w-full rounded-md border bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 shadow-xs focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:bg-slate-50 transition-colors ${
+            className={`w-full rounded-md border bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-600 shadow-xs focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:bg-slate-50 transition-colors ${
               fieldErrors.password
                 ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
                 : 'border-slate-200 focus:border-blue-500 focus:ring-blue-500/20'
@@ -147,7 +147,7 @@ export function LoginForm() {
               disabled={isLoading}
               className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
             />
-            <span className="text-xs md:text-sm text-slate-600">Remember me</span>
+            <span className="text-xs md:text-sm font-medium text-slate-900">Remember me</span>
           </label>
         </div>
 

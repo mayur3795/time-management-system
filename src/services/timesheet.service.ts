@@ -1,4 +1,4 @@
-import { apiClient } from '@/lib/api/axios';
+import { apiClient } from '@/lib/api/axios-client';
 import {
   CreateEntryPayload,
   PaginatedTimesheetsResponse,
@@ -8,32 +8,37 @@ import {
   UpdateEntryPayload,
 } from '@/types/timesheet';
 
-export async function getTimesheets(
+export async function fetchTimesheets(
   filters: TimesheetFilters = {}
 ): Promise<PaginatedTimesheetsResponse> {
   const params = new URLSearchParams();
   if (filters.startDate) params.set('startDate', filters.startDate);
   if (filters.endDate) params.set('endDate', filters.endDate);
   if (filters.status && filters.status !== 'ALL') params.set('status', filters.status);
-  if (filters.page) params.set('page', filters.page.toString());
-  if (filters.limit) params.set('limit', filters.limit.toString());
+  if (filters.page) params.set('page', String(filters.page));
+  if (filters.limit) params.set('limit', String(filters.limit));
 
   const query = params.toString();
-  return apiClient.get<PaginatedTimesheetsResponse>(`/api/timesheets${query ? `?${query}` : ''}`);
+  const response = await apiClient.get<PaginatedTimesheetsResponse>(
+    `/api/timesheets${query ? `?${query}` : ''}`
+  );
+  return response.data;
 }
 
-export async function getTimesheetById(id: string): Promise<Timesheet> {
-  return apiClient.get<Timesheet>(`/api/timesheets/${id}`);
+export async function fetchTimesheetById(id: string): Promise<Timesheet> {
+  const response = await apiClient.get<Timesheet>(`/api/timesheets/${id}`);
+  return response.data;
 }
 
 export async function createTimesheetEntry(
   timesheetId: string,
   payload: CreateEntryPayload
 ): Promise<{ entry: TimesheetEntry; timesheet: Timesheet }> {
-  return apiClient.post<{ entry: TimesheetEntry; timesheet: Timesheet }>(
+  const response = await apiClient.post<{ entry: TimesheetEntry; timesheet: Timesheet }>(
     `/api/timesheets/${timesheetId}/entries`,
     payload
   );
+  return response.data;
 }
 
 export async function updateTimesheetEntry(
@@ -41,17 +46,19 @@ export async function updateTimesheetEntry(
   entryId: string,
   payload: UpdateEntryPayload
 ): Promise<{ entry: TimesheetEntry; timesheet: Timesheet }> {
-  return apiClient.put<{ entry: TimesheetEntry; timesheet: Timesheet }>(
+  const response = await apiClient.put<{ entry: TimesheetEntry; timesheet: Timesheet }>(
     `/api/timesheets/${timesheetId}/entries/${entryId}`,
     payload
   );
+  return response.data;
 }
 
 export async function deleteTimesheetEntry(
   timesheetId: string,
   entryId: string
 ): Promise<{ success: boolean; timesheet: Timesheet }> {
-  return apiClient.delete<{ success: boolean; timesheet: Timesheet }>(
+  const response = await apiClient.delete<{ success: boolean; timesheet: Timesheet }>(
     `/api/timesheets/${timesheetId}/entries/${entryId}`
   );
+  return response.data;
 }

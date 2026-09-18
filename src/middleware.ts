@@ -5,7 +5,7 @@ import { getToken } from 'next-auth/jwt';
 export async function middleware(request: NextRequest) {
   const token = await getToken({
     req: request,
-    secret: process.env.NEXTAUTH_SECRET || 'ticktock-secret-key-assessment-super-secure-token-12345',
+    secret: process.env.NEXTAUTH_SECRET || 'tm_system_7fK9vQ2xLm8Rz4Np6Yt3Ws1Ha9Bc5De0',
   });
 
   const { pathname } = request.nextUrl;

@@ -3,8 +3,8 @@ import { queryKeys } from '@/constants/query-keys';
 import {
   createTimesheetEntry,
   deleteTimesheetEntry,
-  getTimesheetById,
-  getTimesheets,
+  fetchTimesheetById,
+  fetchTimesheets,
   updateTimesheetEntry,
 } from '@/services/timesheet.service';
 import {
@@ -16,14 +16,15 @@ import {
 export function useTimesheets(filters: TimesheetFilters = {}) {
   return useQuery({
     queryKey: queryKeys.timesheets.list(filters),
-    queryFn: () => getTimesheets(filters),
+    queryFn: () => fetchTimesheets(filters),
+    placeholderData: (previousData) => previousData,
   });
 }
 
 export function useTimesheet(id: string) {
   return useQuery({
     queryKey: queryKeys.timesheets.detail(id),
-    queryFn: () => getTimesheetById(id),
+    queryFn: () => fetchTimesheetById(id),
     enabled: Boolean(id),
   });
 }
