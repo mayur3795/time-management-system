@@ -144,20 +144,20 @@ export default function TimesheetDetailPage() {
     <div className="min-h-screen flex flex-col bg-[#F8F9FA]">
       <Header />
 
-      <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8">
+      <main className="flex-1 py-5 sm:py-8 px-3.5 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl">
           <div className="mb-4">
             <Link
               href="/timesheets"
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 transition-colors py-1 px-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>Back to Timesheets</span>
             </Link>
           </div>
 
-          <div className="rounded-xl border border-[#E5E7EB] bg-white p-6 sm:p-8 shadow-xs">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-8 mb-8 border-b border-slate-100">
+          <div className="rounded-xl border border-[#E5E7EB] bg-white p-4 sm:p-6 md:p-8 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 sm:pb-8 mb-6 sm:mb-8 border-b border-slate-100">
               <div>
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0F172A]">
                   This week&apos;s timesheet
@@ -167,10 +167,12 @@ export default function TimesheetDetailPage() {
                 </p>
               </div>
 
-              <WeeklyProgressBar totalHours={timesheet.totalHours} targetHours={40} />
+              <div className="w-full sm:w-auto flex justify-start sm:justify-end">
+                <WeeklyProgressBar totalHours={timesheet.totalHours} targetHours={40} />
+              </div>
             </div>
 
-            <div className="space-y-8">
+            <div className="space-y-6 sm:space-y-8">
               {daysOfWeek.map((dayDate, dayIdx) => {
                 const dayEntries = timesheet.entries.filter((e) => e.date === dayDate);
                 const isFirstDay = dayIdx === 0;
@@ -178,10 +180,10 @@ export default function TimesheetDetailPage() {
                 return (
                   <div
                     key={dayDate}
-                    className="flex flex-col md:flex-row gap-2 md:gap-8 items-start"
+                    className="flex flex-col md:flex-row gap-2.5 md:gap-8 items-start"
                   >
-                    <div className="w-20 pt-2 shrink-0">
-                      <span className="text-sm font-semibold text-slate-800">
+                    <div className="w-full md:w-20 pt-1 md:pt-2 shrink-0 pb-1.5 md:pb-0 border-b md:border-b-0 border-slate-100">
+                      <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-700 md:text-slate-800">
                         {formatShortDate(dayDate)}
                       </span>
                     </div>
@@ -201,7 +203,7 @@ export default function TimesheetDetailPage() {
                         variant={isFirstDay && dayEntries.length === 0 ? 'secondary' : 'outline'}
                         onClick={() => handleOpenAddModal(dayDate)}
                         leftIcon={<Plus className="h-4 w-4" />}
-                        className={`w-full py-2.5 text-xs md:text-sm font-medium ${
+                        className={`w-full py-2.5 text-xs md:text-sm font-medium min-h-[42px] ${
                           isFirstDay && dayEntries.length === 0
                             ? 'border-blue-200 bg-blue-50/50 text-[#1B64F2] hover:bg-blue-50'
                             : 'border-slate-200 text-slate-500 hover:border-blue-300 hover:bg-blue-50/20 hover:text-[#1B64F2]'

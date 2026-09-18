@@ -7,7 +7,7 @@ interface FooterProps {
 
 export function Footer({ className = '', maxWidth = 'max-w-6xl' }: FooterProps) {
   return (
-    <footer className={`mt-6 mb-8 px-4 sm:px-6 lg:px-8 ${className}`}>
+    <footer className={`mt-6 mb-8 px-3.5 sm:px-6 lg:px-8 ${className}`}>
       <div className={`mx-auto ${maxWidth}`}>
         <div className="rounded-xl border border-[#E5E7EB] bg-white py-5 sm:py-6 px-4 text-center shadow-2xs">
           <p className="text-xs text-slate-600 font-normal">

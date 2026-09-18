@@ -21,7 +21,7 @@ export function WeeklyProgressBar({
     return 'bg-slate-200';
   };
 
-  const tooltipLeft = Math.max(16, Math.min(84, clampPercent));
+  const tooltipLeft = Math.max(20, Math.min(80, clampPercent));
 
   return (
     <div

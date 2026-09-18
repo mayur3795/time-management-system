@@ -257,13 +257,13 @@ function EntryForm({
           )}
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center gap-3 pt-4 border-t border-slate-100">
+        <div className="flex flex-col sm:flex-row items-center gap-2.5 sm:gap-3 pt-4 border-t border-slate-100">
           <Button
             type="submit"
             id="submitEntryButton"
             variant="primary"
             isLoading={isSubmitting}
-            className="w-full sm:w-auto flex-1"
+            className="w-full sm:w-auto flex-1 min-h-[42px]"
           >
             {isEditing ? 'Update entry' : 'Add entry'}
           </Button>
@@ -274,7 +274,7 @@ function EntryForm({
             variant="secondary"
             onClick={onClose}
             disabled={isSubmitting}
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto min-h-[42px]"
           >
             Cancel
           </Button>
@@ -301,10 +301,11 @@ export function AddEntryModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="modalTitle"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0F172A]/60 backdrop-blur-xs animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#0F172A]/60 backdrop-blur-xs animate-in fade-in duration-150 overflow-y-auto"
+      onClick={onClose}
     >
       <div
-        className="w-full max-w-lg rounded-2xl bg-white p-6 md:p-8 shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-150"
+        className="w-full max-w-lg max-h-[92vh] flex flex-col rounded-2xl bg-white p-5 sm:p-6 md:p-8 shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-150 my-auto overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <EntryForm

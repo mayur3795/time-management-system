@@ -38,14 +38,14 @@ export function Modal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="modalTitle"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0F172A]/60 backdrop-blur-xs animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#0F172A]/60 backdrop-blur-xs animate-in fade-in duration-150 overflow-y-auto"
       onClick={onClose}
     >
       <div
-        className={`w-full ${maxWidth} rounded-2xl bg-white p-6 md:p-8 shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-150`}
+        className={`w-full ${maxWidth} max-h-[92vh] flex flex-col rounded-2xl bg-white shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-150 my-auto overflow-hidden`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
+        <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4 sm:px-6 sm:py-5 shrink-0">
           <h2 id="modalTitle" className="text-lg md:text-xl font-bold text-[#0F172A]">
             {title}
           </h2>
@@ -60,7 +60,7 @@ export function Modal({
           </Button>
         </div>
 
-        <div>{children}</div>
+        <div className="overflow-y-auto p-5 sm:p-6 md:p-8 flex-1">{children}</div>
       </div>
     </div>
   );

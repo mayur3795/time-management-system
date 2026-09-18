@@ -30,21 +30,23 @@ export function TimesheetTaskItem({
   }, []);
 
   return (
-    <div className="group flex items-center justify-between rounded-lg border border-slate-200/90 bg-white px-4 py-3 shadow-2xs transition-colors hover:border-slate-300">
-      <div className="min-w-0 flex-1 pr-4">
-        <p className="truncate text-sm font-normal text-slate-800">
+    <div className="group flex flex-col sm:flex-row sm:items-center justify-between rounded-lg border border-slate-200/90 bg-white p-3.5 sm:px-4 sm:py-3 shadow-2xs transition-colors hover:border-slate-300 gap-2 sm:gap-4">
+      <div className="min-w-0 flex-1 sm:pr-4">
+        <p className="text-sm font-normal text-slate-800 break-words sm:truncate leading-relaxed">
           {entry.description}
         </p>
       </div>
 
-      <div className="flex items-center gap-4 sm:gap-6 shrink-0">
-        <span className="text-xs text-slate-500 font-normal whitespace-nowrap">
-          {entry.hours} {entry.hours === 1 ? 'hr' : 'hrs'}
-        </span>
+      <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-6 w-full sm:w-auto shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-slate-500 font-normal whitespace-nowrap">
+            {entry.hours} {entry.hours === 1 ? 'hr' : 'hrs'}
+          </span>
 
-        <span className="inline-flex items-center rounded-xl bg-[#E1EFFE] px-3.5 py-1 text-xs sm:text-sm font-medium text-[#1E429F] whitespace-nowrap">
-          {entry.projectName}
-        </span>
+          <span className="inline-flex items-center rounded-xl bg-[#E1EFFE] px-2.5 sm:px-3.5 py-0.5 sm:py-1 text-xs sm:text-sm font-medium text-[#1E429F] whitespace-nowrap">
+            {entry.projectName}
+          </span>
+        </div>
 
         <div className="relative" ref={menuRef}>
           <Button

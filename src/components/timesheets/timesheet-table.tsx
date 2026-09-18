@@ -60,8 +60,8 @@ export function TimesheetTable({
   if (isLoading) {
     return (
       <div className="w-full overflow-x-auto min-h-[360px]">
-        <table className="w-full text-left border-collapse" aria-label="Timesheets table loading">
-          <thead>
+        <table className="w-full text-left border-collapse block sm:table" aria-label="Timesheets table loading">
+          <thead className="hidden sm:table-header-group">
             <tr className="border-b border-slate-100 text-[11px] font-semibold text-slate-600 uppercase tracking-wider">
               <th scope="col" className="py-4 px-4">
                 <div className="flex items-center">
@@ -86,20 +86,26 @@ export function TimesheetTable({
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="block sm:table-row-group divide-y-0 sm:divide-y divide-slate-100 space-y-3 sm:space-y-0">
             {[1, 2, 3, 4, 5].map((i) => (
-              <tr key={i} className="animate-pulse h-[53px]">
-                <td className="py-4 px-4 whitespace-nowrap">
+              <tr
+                key={i}
+                className="block sm:table-row rounded-xl sm:rounded-none border sm:border-0 border-slate-200/90 bg-white p-4 sm:p-0 shadow-2xs sm:shadow-none animate-pulse"
+              >
+                <td className="flex sm:table-cell items-center justify-between py-1 sm:py-4 px-0 sm:px-4">
+                  <div className="h-3 w-12 bg-slate-200 rounded sm:hidden"></div>
                   <div className="h-4 w-12 bg-slate-200 rounded"></div>
                 </td>
-                <td className="py-4 px-4 whitespace-nowrap">
-                  <div className="h-4 w-36 bg-slate-200 rounded"></div>
+                <td className="flex sm:table-cell items-center justify-between py-1.5 sm:py-4 px-0 sm:px-4">
+                  <div className="h-3 w-10 bg-slate-200 rounded sm:hidden"></div>
+                  <div className="h-4 w-32 bg-slate-200 rounded"></div>
                 </td>
-                <td className="py-4 px-4 whitespace-nowrap">
+                <td className="flex sm:table-cell items-center justify-between py-1.5 sm:py-4 px-0 sm:px-4">
+                  <div className="h-3 w-12 bg-slate-200 rounded sm:hidden"></div>
                   <div className="h-6 w-24 bg-slate-200 rounded-full"></div>
                 </td>
-                <td className="py-4 px-4 text-right whitespace-nowrap">
-                  <div className="h-4 w-12 bg-slate-200 rounded ml-auto"></div>
+                <td className="block sm:table-cell text-right py-2 sm:py-4 px-0 sm:px-4 pt-3 sm:pt-4 border-t sm:border-t-0 border-slate-100">
+                  <div className="h-8 w-full sm:w-14 bg-slate-200 rounded-lg sm:rounded ml-auto"></div>
                 </td>
               </tr>
             ))}
@@ -135,8 +141,8 @@ export function TimesheetTable({
 
   return (
     <div className="w-full overflow-x-auto min-h-[360px]">
-      <table className="w-full text-left border-collapse" aria-label="Timesheets">
-        <thead>
+      <table className="w-full text-left border-collapse block sm:table" aria-label="Timesheets">
+        <thead className="hidden sm:table-header-group">
           <tr className="border-b border-slate-100 text-[11px] font-semibold text-slate-600 uppercase tracking-wider">
             <th
               scope="col"
@@ -176,26 +182,37 @@ export function TimesheetTable({
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
+        <tbody className="block sm:table-row-group divide-y-0 sm:divide-y divide-slate-100 text-sm text-slate-700 space-y-3 sm:space-y-0">
           {timesheets.map((ts) => (
             <tr
               key={ts.id}
-              className="hover:bg-slate-50/60 transition-colors group h-[53px]"
+              className="block sm:table-row rounded-xl sm:rounded-none border sm:border-0 border-slate-200/90 sm:border-b sm:border-slate-100 bg-white p-4 sm:p-0 shadow-2xs sm:shadow-none hover:bg-slate-50/60 transition-colors"
             >
-              <td className="py-4 px-4 font-normal text-slate-800 whitespace-nowrap">
-                {ts.weekNumber}
+              <td className="flex sm:table-cell items-center justify-between sm:justify-start py-1 sm:py-4 px-0 sm:px-4 font-normal text-slate-800 whitespace-nowrap">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider sm:hidden">
+                  Week
+                </span>
+                <span className="font-semibold sm:font-normal text-slate-900 sm:text-slate-800">
+                  #{ts.weekNumber}
+                </span>
               </td>
-              <td className="py-4 px-4 font-normal text-slate-600 whitespace-nowrap">
-                {formatTimesheetDateRange(ts.startDate, ts.endDate)}
+              <td className="flex sm:table-cell items-center justify-between sm:justify-start py-1.5 sm:py-4 px-0 sm:px-4 font-normal text-slate-600 whitespace-nowrap">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider sm:hidden">
+                  Date
+                </span>
+                <span>{formatTimesheetDateRange(ts.startDate, ts.endDate)}</span>
               </td>
-              <td className="py-4 px-4 whitespace-nowrap">
+              <td className="flex sm:table-cell items-center justify-between sm:justify-start py-1.5 sm:py-4 px-0 sm:px-4 whitespace-nowrap">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider sm:hidden">
+                  Status
+                </span>
                 <TimesheetStatusBadge status={ts.status} />
               </td>
-              <td className="py-4 px-4 text-right whitespace-nowrap">
+              <td className="block sm:table-cell text-right py-2.5 sm:py-4 px-0 sm:px-4 pt-3 sm:pt-4 border-t sm:border-t-0 border-slate-100 whitespace-nowrap">
                 <Link
                   href={`/timesheets/${ts.id}`}
                   aria-label={`${getActionLabel(ts.status)} Timesheet for Week ${ts.weekNumber}`}
-                  className="font-medium text-[#1B64F2] hover:text-[#1557D0] transition-colors py-1.5 px-2.5 rounded-md hover:bg-blue-50/50 inline-flex items-center"
+                  className="w-full sm:w-auto justify-center font-medium text-[#1B64F2] hover:text-[#1557D0] transition-colors py-1.5 px-3 rounded-lg sm:rounded-md bg-blue-50/80 sm:bg-transparent hover:bg-blue-50 inline-flex items-center text-xs md:text-sm min-h-[38px] sm:min-h-0"
                 >
                   {getActionLabel(ts.status)}
                 </Link>

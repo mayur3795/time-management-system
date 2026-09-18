@@ -83,10 +83,10 @@ export default function TimesheetsDashboardPage() {
     <div className="min-h-screen flex flex-col bg-[#F8F9FA]">
       <Header />
 
-      <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8">
+      <main className="flex-1 py-5 sm:py-8 px-3.5 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl">
-          <div className="rounded-xl border border-[#E5E7EB] bg-white p-6 md:p-8 shadow-xs">
-            <div className="mb-6">
+          <div className="rounded-xl border border-[#E5E7EB] bg-white p-4 sm:p-6 md:p-8 shadow-xs">
+            <div className="mb-5 sm:mb-6">
               <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#0F172A]">
                 Your Timesheets
               </h1>

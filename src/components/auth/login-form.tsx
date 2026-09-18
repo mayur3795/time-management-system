@@ -59,8 +59,8 @@ export function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md px-6 py-10 md:px-8">
-      <div className="mb-8">
+    <div className="w-full max-w-md px-3.5 py-6 sm:px-6 md:px-8">
+      <div className="mb-6 sm:mb-8">
         <h1 className="text-2xl md:text-3xl font-bold text-[#0F172A] tracking-tight">
           Welcome back
         </h1>

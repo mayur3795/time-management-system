@@ -108,8 +108,8 @@ export function TimesheetFilters({
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-3">
-      <div className="relative" ref={dateRef}>
+    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
+      <div className="relative w-full sm:w-auto" ref={dateRef}>
         <Button
           type="button"
           id="dateRangeFilterButton"
@@ -122,22 +122,22 @@ export function TimesheetFilters({
           leftIcon={<Calendar className="h-4 w-4 text-slate-500" />}
           rightIcon={
             <ChevronDown
-              className={`h-3.5 w-3.5 text-slate-500 transition-transform ${
+              className={`h-3.5 w-3.5 text-slate-500 transition-transform shrink-0 ${
                 dateDropdownOpen ? 'rotate-180' : ''
               }`}
             />
           }
-          className={`py-2 px-3.5 font-normal ${
+          className={`w-full sm:w-auto justify-between sm:justify-center py-2.5 px-3.5 font-normal min-h-[40px] ${
             startDate || endDate
               ? 'border-blue-500 bg-blue-50/40 text-blue-700 font-medium'
               : 'text-slate-700'
           }`}
         >
-          <span>{getDateRangeLabel()}</span>
+          <span className="truncate">{getDateRangeLabel()}</span>
         </Button>
 
         {dateDropdownOpen && (
-          <div className="absolute left-0 mt-2 w-72 rounded-xl border border-slate-200 bg-white p-4 shadow-xl z-40 animate-in fade-in-50 zoom-in-95">
+          <div className="absolute left-0 mt-2 w-full sm:w-72 max-w-[calc(100vw-2.5rem)] rounded-xl border border-slate-200 bg-white p-4 shadow-xl z-40 animate-in fade-in-50 zoom-in-95">
             <div className="mb-3 flex items-center justify-between border-b border-slate-100 pb-2">
               <span className="text-xs font-semibold text-slate-800">Filter by Date</span>
               {(startDate || endDate) && (
@@ -221,7 +221,7 @@ export function TimesheetFilters({
         )}
       </div>
 
-      <div className="relative" ref={statusRef}>
+      <div className="relative w-full sm:w-auto" ref={statusRef}>
         <Button
           type="button"
           id="statusFilterButton"
@@ -236,12 +236,12 @@ export function TimesheetFilters({
           }}
           rightIcon={
             <ChevronDown
-              className={`h-3.5 w-3.5 text-slate-500 transition-transform ${
+              className={`h-3.5 w-3.5 text-slate-500 transition-transform shrink-0 ${
                 statusDropdownOpen ? 'rotate-180' : ''
               }`}
             />
           }
-          className={`py-2 px-3.5 font-normal ${
+          className={`w-full sm:w-auto justify-between sm:justify-center py-2.5 px-3.5 font-normal min-h-[40px] ${
             status && status !== 'ALL'
               ? 'border-blue-500 bg-blue-50/40 text-blue-700 font-medium'
               : 'text-slate-700'
@@ -251,7 +251,7 @@ export function TimesheetFilters({
         </Button>
 
         {statusDropdownOpen && (
-          <div className="absolute left-0 mt-2 w-44 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl z-40 animate-in fade-in-50 zoom-in-95">
+          <div className="absolute left-0 mt-2 w-full sm:w-44 max-w-[calc(100vw-2.5rem)] rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl z-40 animate-in fade-in-50 zoom-in-95">
             {(['ALL', 'COMPLETED', 'INCOMPLETE', 'MISSING'] as const).map((s) => (
               <Button
                 key={s}
@@ -279,7 +279,7 @@ export function TimesheetFilters({
           size="sm"
           onClick={handleResetFilters}
           leftIcon={<RotateCcw className="h-3 w-3" />}
-          className="text-slate-600 hover:text-slate-800"
+          className="w-full sm:w-auto justify-center text-slate-600 hover:text-slate-800 min-h-[40px]"
         >
           <span>Reset</span>
         </Button>

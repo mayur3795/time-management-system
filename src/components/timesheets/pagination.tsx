@@ -44,9 +44,9 @@ export function Pagination({
       className="flex flex-col sm:flex-row items-center justify-between gap-4"
       aria-label={totalItems !== undefined ? `Pagination (${totalItems} total timesheets)` : 'Pagination'}
     >
-      <div className="flex items-center gap-2">
-        <label htmlFor="itemsPerPageSelect" className="sr-only">
-          Items per page
+      <div className="flex items-center justify-between w-full sm:w-auto gap-2">
+        <label htmlFor="itemsPerPageSelect" className="text-xs text-slate-500 sm:sr-only">
+          Show:
         </label>
         <div className="relative inline-block">
           <select
@@ -54,7 +54,7 @@ export function Pagination({
             aria-label="Items per page"
             value={limit}
             onChange={(e) => onLimitChange(Number(e.target.value))}
-            className="appearance-none rounded-lg border border-[#E2E8F0] bg-white py-1.5 pl-3 pr-8 text-xs md:text-sm text-slate-700 hover:bg-slate-50 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+            className="appearance-none rounded-lg border border-[#E2E8F0] bg-white py-1.5 pl-3 pr-8 text-xs md:text-sm text-slate-700 hover:bg-slate-50 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer min-h-[38px]"
           >
             <option value={5}>5 per page</option>
             <option value={10}>10 per page</option>
@@ -64,7 +64,39 @@ export function Pagination({
         </div>
       </div>
 
-      <nav aria-label="Pagination Navigation" className="flex items-center gap-1">
+      {/* Mobile Compact Pagination (< sm) */}
+      <nav aria-label="Pagination Navigation Mobile" className="flex sm:hidden items-center justify-between w-full gap-2 pt-2 border-t border-slate-100">
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          aria-label="Previous Page"
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage <= 1}
+          className="text-slate-600 hover:text-slate-900 h-9 px-3 text-xs"
+        >
+          Previous
+        </Button>
+
+        <span className="text-xs font-medium text-slate-700">
+          Page {currentPage} of {totalPages}
+        </span>
+
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          aria-label="Next Page"
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage >= totalPages}
+          className="text-slate-600 hover:text-slate-900 h-9 px-3 text-xs"
+        >
+          Next
+        </Button>
+      </nav>
+
+      {/* Desktop / Tablet Full Pagination (>= sm) */}
+      <nav aria-label="Pagination Navigation" className="hidden sm:flex items-center gap-1">
         <Button
           type="button"
           variant="ghost"

@@ -38,10 +38,11 @@ export function DeleteConfirmModal({
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0F172A]/60 backdrop-blur-xs animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#0F172A]/60 backdrop-blur-xs animate-in fade-in duration-150 overflow-y-auto"
+      onClick={onClose}
     >
       <div
-        className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-150"
+        className="w-full max-w-md max-h-[92vh] flex flex-col rounded-2xl bg-white p-5 sm:p-6 shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-150 my-auto overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
@@ -65,19 +66,20 @@ export function DeleteConfirmModal({
         </p>
 
         <div className="rounded-lg bg-slate-50 border border-slate-200/80 p-3 mb-5 text-xs text-slate-700">
-          <p className="font-semibold text-slate-900 truncate">{entry.description}</p>
+          <p className="font-semibold text-slate-900 break-words">{entry.description}</p>
           <p className="text-slate-600 mt-0.5">
             {entry.hours} {entry.hours === 1 ? 'hr' : 'hrs'} • {entry.projectName}
           </p>
         </div>
 
-        <div className="flex items-center justify-end gap-3">
+        <div className="flex flex-col-reverse sm:flex-row items-center justify-end gap-2.5 sm:gap-3">
           <Button
             type="button"
             variant="secondary"
             size="sm"
             onClick={onClose}
             disabled={isDeleting}
+            className="w-full sm:w-auto min-h-[40px]"
           >
             Cancel
           </Button>
@@ -88,6 +90,7 @@ export function DeleteConfirmModal({
             size="sm"
             onClick={handleConfirm}
             isLoading={isDeleting}
+            className="w-full sm:w-auto min-h-[40px]"
           >
             Delete entry
           </Button>
