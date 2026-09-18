@@ -2,15 +2,15 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AlertCircle, Info } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { loginSchema } from '@/schemas/auth.schema';
 import { loginWithCredentials } from '@/services/auth.service';
 
 export function LoginForm() {
   const router = useRouter();
-  const [email, setEmail] = useState('john@example.com');
-  const [password, setPassword] = useState('password123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [generalError, setGeneralError] = useState<string | null>(null);
@@ -45,7 +45,7 @@ export function LoginForm() {
       const result = await loginWithCredentials(validationResult.data);
 
       if (result?.error) {
-        setGeneralError('Invalid email or password. Please use the demo credentials below.');
+        setGeneralError('Invalid email or password. Please check your credentials and try again.');
         setIsLoading(false);
       } else {
         router.push('/timesheets');
@@ -56,13 +56,6 @@ export function LoginForm() {
       setGeneralError('An unexpected error occurred during sign in. Please try again.');
       setIsLoading(false);
     }
-  };
-
-  const handleFillDemo = () => {
-    setEmail('john@example.com');
-    setPassword('password123');
-    setFieldErrors({});
-    setGeneralError(null);
   };
 
   return (
@@ -82,30 +75,6 @@ export function LoginForm() {
           <span>{generalError}</span>
         </div>
       )}
-
-      <div className="mb-6 flex items-start justify-between gap-2 rounded-lg border border-blue-100 bg-blue-50/70 p-3 text-xs text-blue-900">
-        <div className="flex items-start gap-2">
-          <Info className="h-4 w-4 shrink-0 text-blue-600 mt-0.5" />
-          <div>
-            <p className="font-semibold text-blue-950">Demo Credentials:</p>
-            <p className="text-blue-800">
-              <span className="font-medium">Email:</span> john@example.com
-            </p>
-            <p className="text-blue-800">
-              <span className="font-medium">Password:</span> password123
-            </p>
-          </div>
-        </div>
-        <Button
-          type="button"
-          variant="secondary"
-          size="sm"
-          onClick={handleFillDemo}
-          className="shrink-0 text-[11px] font-medium text-blue-700 hover:bg-blue-50 py-1 px-2"
-        >
-          Auto Fill
-        </Button>
-      </div>
 
       <form onSubmit={handleSubmit} className="space-y-5" noValidate>
         <div>
