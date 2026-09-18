@@ -14,8 +14,8 @@ export function Header() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const userName = session?.user?.name || 'John Doe';
-  const userEmail = session?.user?.email || 'john@example.com';
+  const userName = session?.user?.name || 'Mayur Bhagat';
+  const userEmail = session?.user?.email || 'mayurbhagat@gmail.com';
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
