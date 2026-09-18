@@ -12,7 +12,7 @@ export type WorkType =
 export interface TimesheetEntry {
   id: string;
   timesheetId: string;
-  date: string; // YYYY-MM-DD
+  date: string;
   projectId: string;
   projectName: string;
   workType: WorkType;
@@ -26,8 +26,8 @@ export interface Timesheet {
   id: string;
   weekNumber: number;
   year: number;
-  startDate: string; // YYYY-MM-DD
-  endDate: string; // YYYY-MM-DD
+  startDate: string;
+  endDate: string;
   totalHours: number;
   status: TimesheetStatus;
   entries: TimesheetEntry[];

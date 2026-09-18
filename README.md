@@ -1,6 +1,6 @@
 # ticktock — Timesheet Management SaaS
 
-A production-grade Timesheet Management SaaS web application built with **Next.js (App Router)**, **TypeScript**, **TailwindCSS**, and **NextAuth**. Designed for high visual fidelity and robust frontend architecture as part of the Frontend Developer Technical Assessment.
+A production-grade Timesheet Management SaaS web application built with **Next.js 16 (App Router)**, **TypeScript**, **Axios**, **TanStack Query (React Query)**, **Zod**, **TailwindCSS**, and **NextAuth**. Designed for high visual fidelity, rock-solid frontend architecture, and assessment readiness.
 
 ---
 
@@ -10,23 +10,23 @@ A production-grade Timesheet Management SaaS web application built with **Next.j
 - [Tech Stack](#tech-stack)
 - [Demo Credentials](#demo-credentials)
 - [Getting Started & Setup](#getting-started--setup)
-- [Architecture & Data Isolation](#architecture--data-isolation)
+- [Architecture & Data Flow](#architecture--data-flow)
 - [Project Structure](#project-structure)
+- [Validation Layer (Zod)](#validation-layer-zod)
 - [Business Logic & Status Rules](#business-logic--status-rules)
 - [Testing](#testing)
-- [Assumptions & Design Decisions](#assumptions--design-decisions)
-- [Time Spent](#time-spent)
+- [SEO & Metadata](#seo--metadata)
 
 ---
 
 ## Project Overview
 
-**ticktock** is an employee work-hours tracking application built to match the assessment specification and design references. It features:
+**ticktock** is an employee work-hours tracking application built to match the technical assessment specification and visual design references. It features:
 - A split-screen desktop authentication experience with demo auto-fill and route guards.
 - A comprehensive timesheet dashboard with multi-week date range filtering, status filtering, column sorting, and pagination.
 - A weekly timesheet detail view with a dynamic progress bar and vertical daily task breakdowns.
-- Interactive modal dialogs with real-time validation and numeric steppers for adding, editing, and deleting timesheet entries.
-- A strict API architecture where components communicate exclusively with internal Next.js API routes.
+- Interactive modal dialogs with real-time Zod schema validation and numeric steppers for adding, editing, and deleting timesheet entries.
+- A strict API architecture where frontend components communicate through TanStack Query hooks, domain services, and a centralized Axios client targeting internal Next.js API routes.
 
 ---
 
@@ -35,13 +35,13 @@ A production-grade Timesheet Management SaaS web application built with **Next.j
 1. **Authentication & Route Protection (NextAuth)**
    - Dummy authentication via NextAuth credentials provider and JWT session strategy.
    - Pre-configured demo account with one-click auto-fill.
-   - Session persistence and route middleware guarding `/timesheets/:path*` (unauthenticated visitors are redirected to `/login`).
+   - Route middleware guarding `/timesheets/:path*` (unauthenticated visitors are redirected to `/login`).
    - Profile dropdown with sign-out action and online status indicator.
 
 2. **Timesheets Dashboard (`/timesheets`)**
    - Summary table displaying `WEEK #`, `DATE`, `STATUS`, and `ACTIONS`.
    - Distinct status badges:
-     - `COMPLETED` (green pill badge)
+     - `COMPLETED` (emerald pill badge)
      - `INCOMPLETE` (amber pill badge)
      - `MISSING` (rose pill badge)
    - Dynamic action links based on timesheet status:
@@ -52,7 +52,7 @@ A production-grade Timesheet Management SaaS web application built with **Next.j
    - Configurable pagination (5, 10, or 20 per page).
 
 3. **Date Range & Status Filters**
-   - **Multi-week Date Range Filtering**: Selecting a range (e.g., *1 Jan - 31 Jan*) surfaces all weeks that overlap or fall within that window, rather than just the first matching record.
+   - **Multi-week Date Range Filtering**: Selecting a range surfaces all weeks that overlap or fall within that window.
    - Quick date presets (January 2024, February 2024, All Available) and custom `From` / `To` date pickers.
    - Status filtering (`All`, `Completed`, `Incomplete`, `Missing`).
    - Filters work seamlessly in tandem and can be cleared with a single click.
@@ -64,13 +64,12 @@ A production-grade Timesheet Management SaaS web application built with **Next.j
    - Task cards showing description, hours, project tag, and 3-dot dropdown menu for **Edit** and **Delete**.
    - Accessible **+ Add new task** trigger per day.
 
-5. **Add / Edit Entry Modal**
-   - Modal matches reference screenshot hierarchy:
-     - Project selection dropdown (dynamically retrieved via `/api/projects`).
-     - Type of Work dropdown (Bug fixes, Feature Development, Code Review, Testing, Meeting, Research, Other).
-     - Task description textarea with helper note.
-     - Custom numeric stepper (`[-] [hours] [+]`) with daily limit enforcement.
-   - Inline field-level error messages and loading states during submission.
+5. **Add / Edit Entry Modal (Zod Form Validation)**
+   - Project selection dropdown (dynamically retrieved via `/api/projects`).
+   - Type of Work dropdown (Bug fixes, Feature Development, Code Review, Testing, Meeting, Research, Other).
+   - Task description textarea with helper note.
+   - Custom numeric stepper (`[-] [hours] [+]`) with daily limit enforcement.
+   - Field-level validation messages powered by Zod schemas.
 
 6. **Delete Entry Confirmation**
    - Accessible confirmation modal showing entry summary before deletion to prevent accidental loss.
@@ -83,10 +82,13 @@ A production-grade Timesheet Management SaaS web application built with **Next.j
 | :--- | :--- |
 | **Next.js 16 (App Router)** | Modern React framework with server components and internal API routes |
 | **TypeScript** | Strict type safety across domain entities, API contracts, and components |
+| **TanStack Query (v5)** | Server state management, caching, optimistic invalidation, and query synchronization |
+| **Axios** | Centralized API client with interceptors, standard headers, and normalized error handling |
+| **Zod (v4)** | Schema-driven runtime validation for forms and API routes |
 | **TailwindCSS v4** | Modern utility-first styling configured with pixel-accurate color palettes |
 | **NextAuth v4** | Authentication session management, credentials provider, and route guarding |
 | **Lucide React** | Lightweight, accessible iconography |
-| **Vitest & Testing Library** | Fast unit and component testing suite with jsdom |
+| **Vitest & Testing Library** | Unit and component testing suite with jsdom |
 | **Google Fonts Inter** | Clean, modern typography loaded via `next/font/google` |
 
 ---
@@ -103,80 +105,70 @@ You can sign in using the following demo account (or click the **Auto Fill** but
 ## Getting Started & Setup
 
 ### 1. Prerequisites
-- **Node.js**: v18.0.0 or later (tested on Node v24)
+- **Node.js**: v18.0.0 or later
 - **npm**: v9.0.0 or later
 
 ### 2. Installation
-Clone the repository and install dependencies:
+Install dependencies:
 ```bash
 npm install
 ```
 
-### 3. Environment Configuration (Optional)
-A default development secret is built-in. If you wish to specify an explicit NextAuth secret:
-```bash
-# Create a .env.local file
-NEXTAUTH_SECRET=your-secret-key-here
-NEXTAUTH_URL=http://localhost:3000
-```
-
-### 4. Running Locally
+### 3. Running Locally
 Start the development server:
 ```bash
 npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 5. Running Production Build
+### 4. Running Production Build
 ```bash
 npm run build
 npm run start
 ```
 
+### 5. Running Tests & Linters
+```bash
+npm test         # Run unit & component test suite
+npm run lint     # Run ESLint check
+npx tsc --noEmit # Verify TypeScript compilation
+```
+
 ---
 
-## Architecture & Data Isolation
+## Architecture & Data Flow
 
-As strictly required by the technical assessment specification:
-> **React components never import mock data directly.**
-
-The data flow strictly adheres to a three-tier client-server architecture:
+Components never import mock data directly. The application adheres to a clean multi-tier architecture:
 
 ```
-┌─────────────────────────────────┐
-│     React Client Components     │
-│   (Dashboard, Detail, Modals)   │
-└──────────────┬──────────────────┘
-               │ Calls domain API client
-               ▼
-┌─────────────────────────────────┐
-│     lib/api/client.ts           │
-│   (getTimesheets, addEntry...)  │
-└──────────────┬──────────────────┘
-               │ HTTP Requests (GET, POST, PUT, DELETE)
-               ▼
-┌─────────────────────────────────┐
-│   Next.js Internal API Routes   │
-│   (/api/timesheets, /api/...)   │
-└──────────────┬──────────────────┘
-               │ Service Calls
-               ▼
-┌─────────────────────────────────┐
-│   lib/services/timesheetService │
-│   (Filtering, Hours, Status)    │
-└──────────────┬──────────────────┘
-               │ Isolated Data Layer
-               ▼
-┌─────────────────────────────────┐
-│       lib/mocks/*.ts            │
-│   (Mock Store & Initial State)  │
-└─────────────────────────────────┘
+USER ACTION
+    ↓
+React Component (kebab-case file)
+    ↓
+TanStack Query Hook (useTimesheets, useTimesheet, useCreateTimesheetEntry)
+    ↓
+Domain Service Function (timesheet.service.ts)
+    ↓
+Common Axios Instance (src/lib/api/axios.ts)
+    ↓
+Next.js Internal API Route (/api/timesheets)
+    ↓
+Zod Validation Schema (timesheet-entry.schema.ts)
+    ↓
+Server Store Layer (src/server/timesheet-store.ts)
+    ↓
+Constants Data (src/constants/timesheets.ts)
+    ↓
+API Response
+    ↓
+TanStack Query Cache Invalidation & Update
+    ↓
+React UI Re-renders with Updated Hours & Status
 ```
 
 ### Internal API Endpoints
 
 - `GET /api/timesheets`: Filtered and paginated timesheets list.
-  - Query parameters: `startDate`, `endDate`, `status`, `page`, `limit`.
 - `GET /api/timesheets/[id]`: Retrieve single timesheet with full entries.
 - `POST /api/timesheets/[id]/entries`: Create a new entry and recalculate weekly hours/status.
 - `PUT /api/timesheets/[id]/entries/[entryId]`: Update an entry and recalculate weekly hours/status.
@@ -196,7 +188,7 @@ src/
 │   │   ├── auth/[...nextauth]/route.ts     # NextAuth credentials handler
 │   │   ├── projects/route.ts               # GET /api/projects
 │   │   ├── timesheets/
-│   │   │   ├── route.ts                    # GET /api/timesheets (filtering & pagination)
+│   │   │   ├── route.ts                    # GET /api/timesheets (Zod validated)
 │   │   │   └── [id]/
 │   │   │       ├── route.ts                # GET /api/timesheets/[id]
 │   │   │       └── entries/
@@ -206,127 +198,121 @@ src/
 │   ├── login/
 │   │   └── page.tsx                        # Split-screen login page
 │   ├── timesheets/
-│   │   ├── page.tsx                        # Dashboard table view
+│   │   ├── page.tsx                        # Dashboard view with TanStack Query
 │   │   └── [id]/
-│   │       └── page.tsx                    # Weekly timesheet detail view
-│   ├── layout.tsx                          # Root layout with Inter font & AuthProvider
+│   │       └── page.tsx                    # Detail view with TanStack Query mutations
+│   ├── icon.svg                            # Custom ticktock brand favicon
+│   ├── sitemap.ts                          # Next.js Metadata API sitemap
+│   ├── layout.tsx                          # Root layout with QueryProvider & AuthProvider
 │   ├── page.tsx                            # Root redirect (/timesheets or /login)
 │   └── globals.css                         # Tailwind CSS & theme tokens
 ├── components/
 │   ├── auth/
-│   │   ├── LoginForm.tsx                   # Validated login form with demo helper
-│   │   └── AuthProvider.tsx                # NextAuth SessionProvider wrapper
+│   │   ├── auth-provider.tsx               # NextAuth SessionProvider wrapper
+│   │   └── login-form.tsx                  # Zod validated login form with demo helper
 │   ├── layout/
-│   │   ├── Header.tsx                      # Header with brand, nav, and user dropdown
-│   │   └── Footer.tsx                      # Page footer
+│   │   ├── header.tsx                      # Header with brand, nav, and user dropdown
+│   │   └── footer.tsx                      # Page footer
 │   ├── timesheets/
-│   │   ├── TimesheetTable.tsx              # Main table with sortable columns
-│   │   ├── TimesheetFilters.tsx            # Date range and status filter controls
-│   │   ├── TimesheetStatusBadge.tsx        # Pill badges (COMPLETED, INCOMPLETE, MISSING)
-│   │   ├── Pagination.tsx                  # Pagination and items per page selector
-│   │   ├── TimesheetTaskItem.tsx           # Individual task row with 3-dot dropdown
-│   │   ├── AddEntryModal.tsx               # Add & edit task modal dialog
-│   │   ├── DeleteConfirmModal.tsx          # Delete confirmation modal
-│   │   └── WeeklyProgressBar.tsx           # Visual progress bar (hours / 40 hrs)
+│   │   ├── add-entry-modal.tsx             # Zod validated add & edit task modal
+│   │   ├── delete-confirm-modal.tsx        # Delete confirmation modal
+│   │   ├── pagination.tsx                  # Pagination and items per page selector
+│   │   ├── timesheet-filters.tsx           # Date range and status filter controls
+│   │   ├── timesheet-status-badge.tsx      # Pill badges (COMPLETED, INCOMPLETE, MISSING)
+│   │   ├── timesheet-table.tsx             # Main table with sortable columns
+│   │   ├── timesheet-task-item.tsx         # Task row with 3-dot action dropdown
+│   │   └── weekly-progress-bar.tsx         # Visual progress bar (hours / 40 hrs)
 │   └── ui/
-│       └── Stepper.tsx                     # [-] [input] [+] numeric stepper component
+│       ├── button.tsx                      # Accessible Button with loading state
+│       ├── input.tsx                       # Form text input
+│       ├── modal.tsx                       # Accessible modal wrapper
+│       ├── select.tsx                      # Custom select component
+│       └── stepper.tsx                     # Numeric hours stepper
+├── constants/
+│   ├── projects.ts                         # Shared project definitions
+│   ├── query-keys.ts                       # Centralized TanStack Query keys
+│   ├── timesheets.ts                       # Initial timesheet seed data
+│   ├── users.ts                            # Seed user credentials
+│   └── work-types.ts                       # Work categories constant
+├── hooks/
+│   ├── use-projects.ts                     # Query hook for projects
+│   ├── use-timesheets.ts                   # Queries & mutations for timesheets and entries
+│   └── use-user.ts                         # Query hook for current user
 ├── lib/
 │   ├── api/
-│   │   └── client.ts                       # Typed API client helper functions
+│   │   └── axios.ts                        # Centralized Axios client & ApiError
 │   ├── auth/
 │   │   └── authOptions.ts                  # NextAuth credentials config
-│   ├── services/
-│   │   ├── timesheetService.ts             # In-memory service with business calculations
-│   │   ├── projectService.ts               # Project data service
-│   │   └── userService.ts                  # User lookup service
-│   ├── mocks/
-│   │   ├── users.ts                        # Demo user credentials
-│   │   ├── projects.ts                     # Available projects
-│   │   └── timesheets.ts                   # 10 weeks of initial mock timesheets
 │   └── utils/
-│       ├── status.ts                       # Business logic for timesheet status calculation
-│       └── date.ts                         # Date formatting and multi-week overlap helpers
-├── middleware.ts                           # Route guard redirecting unauthenticated users
-├── tests/
-│   ├── status.test.ts                      # Unit tests for status calculation
-│   ├── filters.test.ts                     # Unit tests for date range & status filters
-│   ├── AddEntryModal.test.tsx              # Component tests for modal form validation
-│   └── TimesheetTable.test.tsx             # Component tests for table rendering
-└── types/
-    ├── auth.ts                             # User & AuthSession types
-    ├── project.ts                          # Project interface
-    └── timesheet.ts                        # Timesheet, entry, status, and filter types
+│       ├── date.ts                         # Date formatting & multi-week range overlap
+│       └── status.ts                       # Business logic for status calculation
+├── providers/
+│   └── query-provider.tsx                  # TanStack QueryClient provider
+├── schemas/
+│   ├── auth.schema.ts                      # Zod schema for login
+│   ├── timesheet.schema.ts                 # Zod schema for filters and query params
+│   └── timesheet-entry.schema.ts           # Zod schema for add/edit entry
+├── server/
+│   ├── project-store.ts                    # Server-side project data store
+│   ├── timesheet-store.ts                  # Server-side timesheet in-memory store
+│   └── user-store.ts                       # Server-side user lookup
+├── services/
+│   ├── auth.service.ts                     # Client auth service
+│   ├── project.service.ts                  # Client project service (Axios)
+│   ├── timesheet.service.ts                # Client timesheet service (Axios)
+│   └── user.service.ts                     # Client user service (Axios)
+├── types/
+│   ├── auth.ts                             # Auth & user types
+│   ├── project.ts                          # Project model interface
+│   └── timesheet.ts                        # Timesheet & entry interfaces
+└── tests/
+    ├── add-entry-modal.test.tsx            # Modal form validation & submit tests
+    ├── button.test.tsx                     # Button variant & loading tests
+    ├── filters.test.ts                     # Overlap & status filtering tests
+    ├── status.test.ts                      # Business logic unit tests
+    └── timesheet-table.test.tsx            # Table rendering & badge tests
 ```
+
+---
+
+## Validation Layer (Zod)
+
+All validation is centralized using Zod schemas:
+- **`loginSchema`**: Validates email format and non-empty password.
+- **`createEntrySchema`**: Enforces required Project, Type of Work, Task Description, and positive Hours (<= 24).
+- **`updateEntrySchema`**: Enforces schema rules for partial/optional updates.
+- **`timesheetFilterSchema`**: Validates query parameters on the `/api/timesheets` route.
+
+Both client-side forms and internal API routes use these schemas, guaranteeing UX responsiveness on the client and data integrity on the server.
 
 ---
 
 ## Business Logic & Status Rules
 
-Timesheet status is calculated dynamically based on total logged hours:
+Timesheet status is calculated dynamically based on actual entries:
 
-```typescript
-export function getTimesheetStatus(totalHours: number): TimesheetStatus {
-  if (totalHours >= 40) {
-    return 'COMPLETED';
-  }
-  if (totalHours > 0 && totalHours < 40) {
-    return 'INCOMPLETE';
-  }
-  return 'MISSING';
-}
-```
+$$\text{Total Hours} = \sum \text{Entry Hours}$$
 
-- **`COMPLETED`**: 40 hours or more logged by the user.
-- **`INCOMPLETE`**: More than 0 but less than 40 hours logged.
-- **`MISSING`**: Exactly 0 hours logged.
+| Total Hours | Status Badge | Visual Indicator |
+| :--- | :--- | :--- |
+| **$\ge 40$ hours** | `COMPLETED` | Emerald green pill badge |
+| **$> 0$ and $< 40$ hours** | `INCOMPLETE` | Amber pill badge |
+| **$= 0$ hours** | `MISSING` | Rose pill badge |
 
-When tasks are added, updated, or deleted via the internal API, the service layer automatically recalculates `totalHours` and updates the `status` accordingly.
+When an entry is created, updated, or deleted, TanStack Query invalidates the timesheet query cache. The UI refreshes automatically with recalculated total hours and updated status badges.
 
 ---
 
 ## Testing
 
-The project includes an automated test suite powered by **Vitest** and **React Testing Library**.
-
-To run the tests:
-```bash
-npm test
-```
-
-To run the tests in interactive watch mode:
-```bash
-npm run test:watch
-```
-
-### Tested Areas
-1. **Status Calculation**: Verifies that 40h yields `COMPLETED`, 20h yields `INCOMPLETE`, and 0h yields `MISSING`.
-2. **Multi-Week Date Range Filtering**: Verifies that date ranges spanning multiple weeks return all overlapping weeks.
-3. **Modal Form Validation**: Confirms that empty fields or invalid hours trigger validation errors and prevent API submission.
-4. **Table Rendering**: Confirms that table headers, status badges, and appropriate action links ("View", "Update", "Create") render correctly.
+Comprehensive unit and component tests are run with **Vitest**:
+- `npm test`: Runs all 5 test suites (15 tests).
+- Tests cover status calculations, date range overlap detection, reusable buttons, table rendering, and modal validation.
 
 ---
 
-## Assumptions & Design Decisions
+## SEO & Metadata
 
-1. **In-Memory Store Persistence**: To simulate a production database during local review, the service layer uses an in-memory mutable store attached to `globalThis` in development. Mutations (adding, editing, deleting entries) persist across requests without requiring an external database setup.
-2. **Multi-Week Date Range Overlap**: Date ranges use an overlap formula (`weekStart <= filterEnd && weekEnd >= filterStart`), ensuring any week intersecting the selected range is displayed.
-3. **Accessible Modal Stepper**: The hours input is implemented as a custom stepper component matching Screenshot 4 with decrement (`-`), increment (`+`), direct numerical input, and bounds enforcement (1 - 24 hours).
-4. **Responsive Strategy**: On mobile screens (under 768px), the login page focuses on the form while preserving branding; the timesheets dashboard uses horizontal scroll for the table and stacks filters cleanly.
-
----
-
-## Time Spent
-
-| Phase / Activity | Time Allocated |
-| :--- | :--- |
-| **Requirements Analysis & Architecture Planning** | 45 minutes |
-| **Project Setup, Next.js App Router, Tailwind 4 & NextAuth Configuration** | 45 minutes |
-| **Domain Types, Mock Layer & In-Memory Service Engine** | 45 minutes |
-| **Internal Next.js API Routes & Typed API Client** | 45 minutes |
-| **Authentication Screen & Brand Marketing Split UI** | 40 minutes |
-| **Timesheets Dashboard (Table, Sorting, Filters, Pagination)** | 60 minutes |
-| **Weekly Detail Page, Vertical Task List & Dynamic Progress Bar** | 60 minutes |
-| **Add / Edit Entry Modal, Stepper & Delete Confirmation Modal** | 45 minutes |
-| **Automated Tests (Vitest & React Testing Library)** | 35 minutes |
-| **Browser E2E Flow Verification & Documentation** | 40 minutes |
-| **Total Development Time** | **~7.5 hours** |
+- **Sitemap**: Generated dynamically via `src/app/sitemap.ts` at `/sitemap.xml`, indexing public routes (`/login`).
+- **Favicon**: Modern brand SVG at `src/app/icon.svg` displaying the ticktock clock-badge logo.
+- **Metadata**: Professional title and description configured in `src/app/layout.tsx`.

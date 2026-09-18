@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { TimesheetService } from '@/lib/services/timesheetService';
+import { TimesheetStore } from '@/server/timesheet-store';
 
 export async function GET(
   request: NextRequest,
@@ -7,7 +7,7 @@ export async function GET(
 ) {
   try {
     const { id } = await context.params;
-    const timesheet = await TimesheetService.getTimesheetById(id);
+    const timesheet = await TimesheetStore.getTimesheetById(id);
 
     if (!timesheet) {
       return NextResponse.json(

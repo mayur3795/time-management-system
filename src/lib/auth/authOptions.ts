@@ -1,6 +1,6 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { UserService } from '@/lib/services/userService';
+import { UserStore } from '@/server/user-store';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -15,7 +15,7 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const user = await UserService.findUserByEmail(credentials.email);
+        const user = await UserStore.findUserByEmail(credentials.email);
 
         if (user && user.password === credentials.password) {
           return {
@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    maxAge: 30 * 24 * 60 * 60,
   },
   pages: {
     signIn: '/login',

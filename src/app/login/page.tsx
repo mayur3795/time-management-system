@@ -1,4 +1,4 @@
-import { LoginForm } from '@/components/auth/LoginForm';
+import { LoginForm } from '@/components/auth/login-form';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { authOptions } from '@/lib/auth/authOptions';
@@ -12,9 +12,7 @@ export default async function LoginPage() {
 
   return (
     <main className="min-h-screen w-full flex flex-col md:grid md:grid-cols-2 bg-white">
-      {/* Left side: Login form */}
       <div className="flex flex-1 flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
-        {/* Mobile brand header (shown only on mobile) */}
         <div className="mb-6 md:hidden text-center">
           <span className="text-3xl font-extrabold tracking-tight text-[#1B64F2]">
             ticktock
@@ -28,14 +26,9 @@ export default async function LoginPage() {
         </div>
       </div>
 
-      {/* Right side: Blue marketing panel (matching screenshot 1) */}
       <div className="hidden md:flex flex-col justify-between bg-[#1B64F2] p-12 lg:p-16 text-white relative overflow-hidden">
-        {/* Subtle decorative background circles */}
-
-        {/* Top spacer or subtle icon */}
         <div />
 
-        {/* Main marketing copy */}
         <div className="max-w-lg z-10 my-auto">
           <h2 className="text-4xl lg:text-5xl font-bold tracking-tight mb-6 text-white">
             ticktock
@@ -48,7 +41,7 @@ export default async function LoginPage() {
           </p>
         </div>
 
-       
+        <div />
       </div>
     </main>
   );

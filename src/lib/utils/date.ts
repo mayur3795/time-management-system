@@ -1,7 +1,3 @@
-/**
- * Format a start and end date into human readable range matching screenshots:
- * e.g. "1 - 5 January, 2024" or "28 January - 1 February, 2024"
- */
 export function formatTimesheetDateRange(startDateStr: string, endDateStr: string): string {
   const start = new Date(startDateStr);
   const end = new Date(endDateStr);
@@ -29,9 +25,6 @@ export function formatTimesheetDateRange(startDateStr: string, endDateStr: strin
   return `${startDay} ${startMonth}, ${startYear} - ${endDay} ${endMonth}, ${endYear}`;
 }
 
-/**
- * Format a single date into short format: e.g. "Jan 21"
- */
 export function formatShortDate(dateStr: string): string {
   const date = new Date(dateStr);
   const monthsShort = [
@@ -41,10 +34,6 @@ export function formatShortDate(dateStr: string): string {
   return `${monthsShort[date.getUTCMonth()]} ${date.getUTCDate()}`;
 }
 
-/**
- * Checks if a timesheet week [timesheetStart, timesheetEnd] overlaps with a filter range [filterStart, filterEnd].
- * A week overlaps if: timesheetStart <= filterEnd AND timesheetEnd >= filterStart
- */
 export function isWeekInDateRange(
   timesheetStart: string,
   timesheetEnd: string,
@@ -75,9 +64,6 @@ export function isWeekInDateRange(
   return true;
 }
 
-/**
- * Returns an array of YYYY-MM-DD string dates from start to end (inclusive)
- */
 export function getDaysInRange(startDateStr: string, endDateStr: string): string[] {
   const days: string[] = [];
   const current = new Date(startDateStr);

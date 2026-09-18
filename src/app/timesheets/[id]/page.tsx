@@ -1,67 +1,41 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Plus, AlertCircle, Loader2 } from 'lucide-react';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
-import { WeeklyProgressBar } from '@/components/timesheets/WeeklyProgressBar';
-import { TimesheetTaskItem } from '@/components/timesheets/TimesheetTaskItem';
-import { AddEntryModal } from '@/components/timesheets/AddEntryModal';
-import { DeleteConfirmModal } from '@/components/timesheets/DeleteConfirmModal';
-import { Button } from '@/components/ui/Button';
+import { ArrowLeft, Plus, AlertCircle } from 'lucide-react';
+import { Header } from '@/components/layout/header';
+import { Footer } from '@/components/layout/footer';
+import { WeeklyProgressBar } from '@/components/timesheets/weekly-progress-bar';
+import { TimesheetTaskItem } from '@/components/timesheets/timesheet-task-item';
+import { AddEntryModal } from '@/components/timesheets/add-entry-modal';
+import { DeleteConfirmModal } from '@/components/timesheets/delete-confirm-modal';
+import { Button } from '@/components/ui/button';
 import {
-  getTimesheet,
-  getProjects,
-  createTimesheetEntry,
-  updateTimesheetEntry,
-  deleteTimesheetEntry,
-} from '@/lib/api/client';
-import { Timesheet, TimesheetEntry, WorkType } from '@/types/timesheet';
-import { Project } from '@/types/project';
+  useCreateTimesheetEntry,
+  useDeleteTimesheetEntry,
+  useTimesheet,
+  useUpdateTimesheetEntry,
+} from '@/hooks/use-timesheets';
+import { useProjects } from '@/hooks/use-projects';
+import { TimesheetEntry, WorkType } from '@/types/timesheet';
 import { formatTimesheetDateRange, formatShortDate, getDaysInRange } from '@/lib/utils/date';
 
 export default function TimesheetDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const id = params?.id as string;
 
-  const [timesheet, setTimesheet] = useState<Timesheet | null>(null);
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: timesheet, isLoading: isTimesheetLoading, isError, error } = useTimesheet(id);
+  const { data: projects = [] } = useProjects();
 
-  // Modal states
+  const createMutation = useCreateTimesheetEntry(id);
+  const updateMutation = useUpdateTimesheetEntry(id);
+  const deleteMutation = useDeleteTimesheetEntry(id);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDayDate, setSelectedDayDate] = useState<string>('');
   const [editingEntry, setEditingEntry] = useState<TimesheetEntry | null>(null);
-
-  // Delete modal state
   const [deletingEntry, setDeletingEntry] = useState<TimesheetEntry | null>(null);
-
-  const loadData = useCallback(async () => {
-    if (!id) return;
-    setIsLoading(true);
-    setError(null);
-    try {
-      const [tsData, projData] = await Promise.all([
-        getTimesheet(id),
-        getProjects(),
-      ]);
-      setTimesheet(tsData);
-      setProjects(projData);
-    } catch (err) {
-      console.error('Failed to load timesheet detail:', err);
-      setError('Unable to load timesheet details. It may not exist.');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [id]);
-
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
 
   const handleOpenAddModal = (date: string) => {
     setSelectedDayDate(date);
@@ -89,37 +63,35 @@ export default function TimesheetDetailPage() {
     if (!timesheet) return;
 
     if (editingEntry) {
-      // Update entry
-      const response = await updateTimesheetEntry(timesheet.id, editingEntry.id, {
-        projectId: data.projectId,
-        workType: data.workType,
-        description: data.description,
-        hours: data.hours,
-        date: data.date,
+      await updateMutation.mutateAsync({
+        entryId: editingEntry.id,
+        payload: {
+          projectId: data.projectId,
+          workType: data.workType,
+          description: data.description,
+          hours: data.hours,
+          date: data.date,
+        },
       });
-      setTimesheet(response.timesheet);
     } else {
-      // Create new entry
-      const response = await createTimesheetEntry(timesheet.id, {
+      await createMutation.mutateAsync({
         projectId: data.projectId,
         workType: data.workType,
         description: data.description,
         hours: data.hours,
         date: data.date,
       });
-      setTimesheet(response.timesheet);
     }
   };
 
   const handleConfirmDelete = async () => {
     if (!timesheet || !deletingEntry) return;
 
-    const response = await deleteTimesheetEntry(timesheet.id, deletingEntry.id);
-    setTimesheet(response.timesheet);
+    await deleteMutation.mutateAsync(deletingEntry.id);
     setDeletingEntry(null);
   };
 
-  if (isLoading) {
+  if (isTimesheetLoading) {
     return (
       <div className="min-h-screen flex flex-col bg-[#F8F9FA]">
         <Header />
@@ -141,7 +113,9 @@ export default function TimesheetDetailPage() {
     );
   }
 
-  if (error || !timesheet) {
+  if (isError || !timesheet) {
+    const errorMessage = error instanceof Error ? error.message : 'The requested timesheet does not exist.';
+
     return (
       <div className="min-h-screen flex flex-col bg-[#F8F9FA]">
         <Header />
@@ -149,7 +123,7 @@ export default function TimesheetDetailPage() {
           <div className="mx-auto max-w-md rounded-xl border border-slate-200 bg-white p-8 shadow-xs">
             <AlertCircle className="mx-auto h-10 w-10 text-red-500 mb-3" />
             <h2 className="text-lg font-bold text-slate-800 mb-1">Timesheet Not Found</h2>
-            <p className="text-sm text-slate-500 mb-6">{error || 'The requested timesheet does not exist.'}</p>
+            <p className="text-sm text-slate-500 mb-6">{errorMessage}</p>
             <Link
               href="/timesheets"
               className="inline-flex items-center gap-2 rounded-lg bg-[#1B64F2] px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
@@ -172,7 +146,6 @@ export default function TimesheetDetailPage() {
 
       <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl">
-          {/* Back button */}
           <div className="mb-4">
             <Link
               href="/timesheets"
@@ -183,9 +156,7 @@ export default function TimesheetDetailPage() {
             </Link>
           </div>
 
-          {/* Main Card matching Screenshot 3 */}
           <div className="rounded-xl border border-[#E5E7EB] bg-white p-6 sm:p-8 shadow-xs">
-            {/* Header row: Title & Date range on left, Progress bar on right */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-8 mb-8 border-b border-slate-100">
               <div>
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0F172A]">
@@ -196,11 +167,9 @@ export default function TimesheetDetailPage() {
                 </p>
               </div>
 
-              {/* Progress Bar matching Screenshot 3 */}
               <WeeklyProgressBar totalHours={timesheet.totalHours} targetHours={40} />
             </div>
 
-            {/* Vertical Days layout */}
             <div className="space-y-8">
               {daysOfWeek.map((dayDate, dayIdx) => {
                 const dayEntries = timesheet.entries.filter((e) => e.date === dayDate);
@@ -211,14 +180,12 @@ export default function TimesheetDetailPage() {
                     key={dayDate}
                     className="flex flex-col md:flex-row gap-2 md:gap-8 items-start"
                   >
-                    {/* Day label */}
                     <div className="w-20 pt-2 shrink-0">
                       <span className="text-sm font-semibold text-slate-800">
                         {formatShortDate(dayDate)}
                       </span>
                     </div>
 
-                    {/* Day entries & Add task button */}
                     <div className="flex-1 w-full space-y-2.5">
                       {dayEntries.map((entry) => (
                         <TimesheetTaskItem
@@ -229,7 +196,6 @@ export default function TimesheetDetailPage() {
                         />
                       ))}
 
-                      {/* Add new task button */}
                       <Button
                         type="button"
                         variant={isFirstDay && dayEntries.length === 0 ? 'secondary' : 'outline'}
@@ -254,7 +220,6 @@ export default function TimesheetDetailPage() {
 
       <Footer />
 
-      {/* Add / Edit Entry Modal */}
       <AddEntryModal
         isOpen={isModalOpen}
         onClose={() => {
@@ -267,7 +232,6 @@ export default function TimesheetDetailPage() {
         entryToEdit={editingEntry}
       />
 
-      {/* Delete Confirmation Modal */}
       <DeleteConfirmModal
         isOpen={Boolean(deletingEntry)}
         entry={deletingEntry}

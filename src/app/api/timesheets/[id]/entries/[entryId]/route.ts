@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { TimesheetService } from '@/lib/services/timesheetService';
-import { UpdateEntryPayload } from '@/types/timesheet';
+import { TimesheetStore } from '@/server/timesheet-store';
+import { updateEntrySchema } from '@/schemas/timesheet-entry.schema';
 
 export async function PUT(
   request: NextRequest,
@@ -8,39 +8,25 @@ export async function PUT(
 ) {
   try {
     const { id, entryId } = await context.params;
-    const body: UpdateEntryPayload = await request.json();
+    const body = await request.json();
 
-    const errors: Record<string, string> = {};
-    if (body.projectId !== undefined && !body.projectId.trim()) {
-      errors.projectId = 'Project is required.';
-    }
-    if (body.workType !== undefined && !body.workType.trim()) {
-      errors.workType = 'Type of work is required.';
-    }
-    if (body.description !== undefined && !body.description.trim()) {
-      errors.description = 'Task description cannot be empty.';
-    }
-    if (body.hours !== undefined) {
-      const hoursNum = Number(body.hours);
-      if (isNaN(hoursNum) || hoursNum <= 0) {
-        errors.hours = 'Hours must be greater than 0.';
-      } else if (hoursNum > 24) {
-        errors.hours = 'Hours cannot exceed 24 hours per entry.';
-      }
-    }
+    const parsed = updateEntrySchema.safeParse(body);
+    if (!parsed.success) {
+      const fieldErrors: Record<string, string> = {};
+      parsed.error.issues.forEach((err) => {
+        const path = err.path.join('.');
+        if (path && !fieldErrors[path]) {
+          fieldErrors[path] = err.message;
+        }
+      });
 
-    if (Object.keys(errors).length > 0) {
       return NextResponse.json(
-        { error: 'Validation failed', fields: errors },
+        { error: 'Validation failed', fields: fieldErrors },
         { status: 400 }
       );
     }
 
-    const result = await TimesheetService.updateEntry(id, entryId, {
-      ...body,
-      ...(body.hours !== undefined && { hours: Number(body.hours) }),
-    });
-
+    const result = await TimesheetStore.updateEntry(id, entryId, parsed.data);
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.error('Error in PUT /api/timesheets/[id]/entries/[entryId]:', error);
@@ -55,7 +41,7 @@ export async function DELETE(
 ) {
   try {
     const { id, entryId } = await context.params;
-    const result = await TimesheetService.deleteEntry(id, entryId);
+    const result = await TimesheetStore.deleteEntry(id, entryId);
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.error('Error in DELETE /api/timesheets/[id]/entries/[entryId]:', error);

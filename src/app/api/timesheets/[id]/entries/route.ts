@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { TimesheetService } from '@/lib/services/timesheetService';
-import { CreateEntryPayload } from '@/types/timesheet';
+import { TimesheetStore } from '@/server/timesheet-store';
+import { createEntrySchema } from '@/schemas/timesheet-entry.schema';
 
 export async function POST(
   request: NextRequest,
@@ -8,44 +8,25 @@ export async function POST(
 ) {
   try {
     const { id } = await context.params;
-    const body: CreateEntryPayload = await request.json();
+    const body = await request.json();
 
-    // Validation
-    const errors: Record<string, string> = {};
-    if (!body.projectId || !body.projectId.trim()) {
-      errors.projectId = 'Project is required.';
-    }
-    if (!body.workType || !body.workType.trim()) {
-      errors.workType = 'Type of work is required.';
-    }
-    if (!body.description || !body.description.trim()) {
-      errors.description = 'Task description is required.';
-    }
-    const hoursNum = Number(body.hours);
-    if (isNaN(hoursNum) || hoursNum <= 0) {
-      errors.hours = 'Hours must be greater than 0.';
-    } else if (hoursNum > 24) {
-      errors.hours = 'Hours cannot exceed 24 hours per entry.';
-    }
-    if (!body.date) {
-      errors.date = 'Date is required.';
-    }
+    const parsed = createEntrySchema.safeParse(body);
+    if (!parsed.success) {
+      const fieldErrors: Record<string, string> = {};
+      parsed.error.issues.forEach((err) => {
+        const path = err.path.join('.');
+        if (path && !fieldErrors[path]) {
+          fieldErrors[path] = err.message;
+        }
+      });
 
-    if (Object.keys(errors).length > 0) {
       return NextResponse.json(
-        { error: 'Validation failed', fields: errors },
+        { error: 'Validation failed', fields: fieldErrors },
         { status: 400 }
       );
     }
 
-    const result = await TimesheetService.addEntry(id, {
-      date: body.date,
-      projectId: body.projectId,
-      workType: body.workType,
-      description: body.description.trim(),
-      hours: hoursNum,
-    });
-
+    const result = await TimesheetStore.addEntry(id, parsed.data);
     return NextResponse.json(result, { status: 201 });
   } catch (error) {
     console.error('Error in POST /api/timesheets/[id]/entries:', error);

@@ -1,70 +1,52 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
-import { TimesheetFilters } from '@/components/timesheets/TimesheetFilters';
-import { TimesheetTable } from '@/components/timesheets/TimesheetTable';
-import { Pagination } from '@/components/timesheets/Pagination';
-import { getTimesheets } from '@/lib/api/client';
-import { Timesheet, TimesheetStatus } from '@/types/timesheet';
+import React, { useState, useMemo } from 'react';
+import { Header } from '@/components/layout/header';
+import { Footer } from '@/components/layout/footer';
+import { TimesheetFilters } from '@/components/timesheets/timesheet-filters';
+import { TimesheetTable, SortField, SortOrder } from '@/components/timesheets/timesheet-table';
+import { Pagination } from '@/components/timesheets/pagination';
+import { useTimesheets } from '@/hooks/use-timesheets';
+import { TimesheetStatus } from '@/types/timesheet';
 import { AlertCircle } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 
 export default function TimesheetsDashboardPage() {
-  const [timesheets, setTimesheets] = useState<Timesheet[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Filters and pagination state
   const [startDate, setStartDate] = useState<string | undefined>(undefined);
   const [endDate, setEndDate] = useState<string | undefined>(undefined);
   const [status, setStatus] = useState<TimesheetStatus | 'ALL'>('ALL');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalItems, setTotalItems] = useState(0);
 
-  // Sort state
-  const [sortField, setSortField] = useState<'weekNumber' | 'startDate' | 'status'>('weekNumber');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [sortField, setSortField] = useState<SortField>('weekNumber');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
 
-  const fetchTimesheets = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await getTimesheets({
-        startDate,
-        endDate,
-        status: status === 'ALL' ? undefined : status,
-        page,
-        limit,
-      });
+  const { data, isLoading, isError, error, refetch } = useTimesheets({
+    startDate,
+    endDate,
+    status: status === 'ALL' ? undefined : status,
+    page,
+    limit,
+  });
 
-      let sorted = [...response.timesheets];
-      sorted.sort((a, b) => {
-        let comp = 0;
-        if (sortField === 'weekNumber') comp = a.weekNumber - b.weekNumber;
-        else if (sortField === 'startDate') comp = new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
-        else if (sortField === 'status') comp = a.status.localeCompare(b.status);
+  const timesheetList = data?.timesheets;
 
-        return sortOrder === 'asc' ? comp : -comp;
-      });
+  const sortedTimesheets = useMemo(() => {
+    if (!timesheetList) return [];
+    const items = [...timesheetList];
+    items.sort((a, b) => {
+      let comparison = 0;
+      if (sortField === 'weekNumber') comparison = a.weekNumber - b.weekNumber;
+      else if (sortField === 'startDate') comparison = new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+      else if (sortField === 'status') comparison = a.status.localeCompare(b.status);
 
-      setTimesheets(sorted);
-      setTotalPages(response.pagination.totalPages);
-      setTotalItems(response.pagination.total);
-    } catch (err) {
-      console.error('Failed to load timesheets:', err);
-      setError('Unable to load timesheets. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [startDate, endDate, status, page, limit, sortField, sortOrder]);
+      return sortOrder === 'asc' ? comparison : -comparison;
+    });
+    return items;
+  }, [timesheetList, sortField, sortOrder]);
 
-  useEffect(() => {
-    fetchTimesheets();
-  }, [fetchTimesheets]);
+  const totalPages = data?.pagination.totalPages || 1;
+  const totalItems = data?.pagination.total || 0;
 
   const handleFilterChange = (newFilters: {
     startDate?: string;
@@ -76,7 +58,7 @@ export default function TimesheetsDashboardPage() {
     if (newFilters.status !== undefined) {
       setStatus(newFilters.status);
     }
-    setPage(1); // Reset to first page on filter change
+    setPage(1);
   };
 
   const handleResetFilters = () => {
@@ -86,7 +68,7 @@ export default function TimesheetsDashboardPage() {
     setPage(1);
   };
 
-  const handleSort = (field: 'weekNumber' | 'startDate' | 'status') => {
+  const handleSort = (field: SortField) => {
     if (sortField === field) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
@@ -95,13 +77,14 @@ export default function TimesheetsDashboardPage() {
     }
   };
 
+  const errorMessage = error instanceof Error ? error.message : 'Unable to load timesheets. Please try again.';
+
   return (
     <div className="min-h-screen flex flex-col bg-[#F8F9FA]">
       <Header />
 
       <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl">
-          {/* Main Card matching Screenshot 2 */}
           <div className="rounded-xl border border-[#E5E7EB] bg-white p-6 md:p-8 shadow-xs">
             <div className="mb-6">
               <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#0F172A]">
@@ -109,7 +92,6 @@ export default function TimesheetsDashboardPage() {
               </h1>
             </div>
 
-            {/* Filter controls bar */}
             <div className="mb-6">
               <TimesheetFilters
                 startDate={startDate}
@@ -120,20 +102,20 @@ export default function TimesheetsDashboardPage() {
               />
             </div>
 
-            {error && (
+            {isError && (
               <div
                 role="alert"
                 className="mb-6 flex items-center justify-between rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700"
               >
                 <div className="flex items-center gap-2">
                   <AlertCircle className="h-4 w-4 shrink-0 text-red-500" />
-                  <span>{error}</span>
+                  <span>{errorMessage}</span>
                 </div>
                 <Button
                   type="button"
                   variant="link"
                   size="sm"
-                  onClick={fetchTimesheets}
+                  onClick={() => refetch()}
                   className="font-medium text-red-700 hover:text-red-800"
                 >
                   Retry
@@ -141,9 +123,8 @@ export default function TimesheetsDashboardPage() {
               </div>
             )}
 
-            {/* Table */}
             <TimesheetTable
-              timesheets={timesheets}
+              timesheets={sortedTimesheets}
               isLoading={isLoading}
               sortField={sortField}
               sortOrder={sortOrder}
@@ -151,7 +132,6 @@ export default function TimesheetsDashboardPage() {
               onResetFilters={handleResetFilters}
             />
 
-            {/* Pagination footer with persistent border and placeholder to eliminate CLS */}
             <div className="mt-4 pt-6 border-t border-slate-100 min-h-[64px]">
               {isLoading ? (
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4 animate-pulse">
@@ -163,7 +143,7 @@ export default function TimesheetsDashboardPage() {
                     <div className="h-8 w-16 bg-slate-100 rounded-md" />
                   </div>
                 </div>
-              ) : timesheets.length > 0 ? (
+              ) : sortedTimesheets.length > 0 ? (
                 <Pagination
                   currentPage={page}
                   totalPages={totalPages}
