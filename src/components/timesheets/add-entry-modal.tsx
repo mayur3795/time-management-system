@@ -22,6 +22,7 @@ interface AddEntryModalProps {
   projects: Project[];
   selectedDate: string;
   entryToEdit?: TimesheetEntry | null;
+  timesheetTotalHours?: number;
 }
 
 interface EntryFormProps {
@@ -30,6 +31,7 @@ interface EntryFormProps {
   projects: Project[];
   selectedDate: string;
   entryToEdit?: TimesheetEntry | null;
+  timesheetTotalHours?: number;
 }
 
 function EntryForm({
@@ -38,6 +40,7 @@ function EntryForm({
   projects,
   selectedDate,
   entryToEdit,
+  timesheetTotalHours = 0,
 }: EntryFormProps) {
   const isEditing = Boolean(entryToEdit);
 
@@ -50,7 +53,7 @@ function EntryForm({
   const [description, setDescription] = useState(
     entryToEdit ? entryToEdit.description : ''
   );
-  const [hours, setHours] = useState(entryToEdit ? entryToEdit.hours : 4);
+  const [hours, setHours] = useState(entryToEdit ? entryToEdit.hours : 0.5);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -65,14 +68,26 @@ function EntryForm({
       date: targetDate,
     });
 
+    const fieldErrors: Record<string, string> = {};
+
     if (!result.success) {
-      const fieldErrors: Record<string, string> = {};
       result.error.issues.forEach((err) => {
         const path = err.path[0];
         if (path && typeof path === 'string' && !fieldErrors[path]) {
           fieldErrors[path] = err.message;
         }
       });
+    }
+
+    const existingHoursOtherEntries =
+      timesheetTotalHours - (entryToEdit ? entryToEdit.hours : 0);
+    const potentialTotal = existingHoursOtherEntries + hours;
+
+    if (potentialTotal > 40) {
+      fieldErrors['hours'] = `Total weekly hours cannot exceed 40 hours.`;
+    }
+
+    if (Object.keys(fieldErrors).length > 0) {
       setErrors(fieldErrors);
       return false;
     }
@@ -291,6 +306,7 @@ export function AddEntryModal({
   projects,
   selectedDate,
   entryToEdit,
+  timesheetTotalHours,
 }: AddEntryModalProps) {
   if (!isOpen) return null;
 
@@ -315,6 +331,7 @@ export function AddEntryModal({
           projects={projects}
           selectedDate={selectedDate}
           entryToEdit={entryToEdit}
+          timesheetTotalHours={timesheetTotalHours}
         />
       </div>
     </div>

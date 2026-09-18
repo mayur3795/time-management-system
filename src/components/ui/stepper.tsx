@@ -15,28 +15,30 @@ interface StepperProps {
 
 export function Stepper({
   value,
-  min = 1,
-  max = 24,
-  step = 1,
+  min = 0.5,
+  max = 40,
+  step = 0.5,
   onChange,
   disabled = false,
 }: StepperProps) {
   const handleDecrement = () => {
     if (value > min) {
-      onChange(Math.max(min, value - step));
+      const nextVal = Math.max(min, Math.round((value - step) * 10) / 10);
+      onChange(nextVal);
     }
   };
 
   const handleIncrement = () => {
     if (value < max) {
-      onChange(Math.min(max, value + step));
+      const nextVal = Math.min(max, Math.round((value + step) * 10) / 10);
+      onChange(nextVal);
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseFloat(e.target.value);
     if (!isNaN(val)) {
-      onChange(Math.min(max, Math.max(min, val)));
+      onChange(val);
     }
   };
 

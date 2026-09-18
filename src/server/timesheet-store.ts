@@ -98,8 +98,13 @@ export class TimesheetStore {
       updatedAt: new Date().toISOString(),
     };
 
+    const potentialTotal = calculateTotalHours([...timesheet.entries, newEntry]);
+    if (potentialTotal > 40) {
+      throw new Error('Total timesheet hours cannot exceed 40 hours for the week.');
+    }
+
     timesheet.entries.push(newEntry);
-    timesheet.totalHours = calculateTotalHours(timesheet.entries);
+    timesheet.totalHours = potentialTotal;
     timesheet.status = getTimesheetStatus(timesheet.totalHours);
 
     return {
@@ -146,8 +151,15 @@ export class TimesheetStore {
       updatedAt: new Date().toISOString(),
     };
 
+    const tempEntries = [...timesheet.entries];
+    tempEntries[entryIndex] = updatedEntry;
+    const potentialTotal = calculateTotalHours(tempEntries);
+    if (potentialTotal > 40) {
+      throw new Error('Total timesheet hours cannot exceed 40 hours for the week.');
+    }
+
     timesheet.entries[entryIndex] = updatedEntry;
-    timesheet.totalHours = calculateTotalHours(timesheet.entries);
+    timesheet.totalHours = potentialTotal;
     timesheet.status = getTimesheetStatus(timesheet.totalHours);
 
     return {

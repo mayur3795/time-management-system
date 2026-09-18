@@ -25,8 +25,8 @@ export const createEntrySchema = z.object({
     .min(1, 'Please provide a task description.'),
   hours: z
     .number({ message: 'Hours must be a number.' })
-    .positive('Hours must be greater than 0.')
-    .max(24, 'Hours cannot exceed 24 hours in a single day.'),
+    .min(0.5, 'Hours must be at least 0.5 hours.')
+    .max(40, 'Hours cannot exceed 40 hours.'),
   date: z
     .string()
     .trim()
@@ -51,8 +51,8 @@ export const updateEntrySchema = z.object({
     .optional(),
   hours: z
     .number({ message: 'Hours must be a number.' })
-    .positive('Hours must be greater than 0.')
-    .max(24, 'Hours cannot exceed 24 hours in a single day.')
+    .min(0.5, 'Hours must be at least 0.5 hours.')
+    .max(40, 'Hours cannot exceed 40 hours.')
     .optional(),
   date: z
     .string()

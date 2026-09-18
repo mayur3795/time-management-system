@@ -235,6 +235,7 @@ export function TimesheetDetailView({ id }: TimesheetDetailViewProps) {
         projects={projects}
         selectedDate={selectedDayDate}
         entryToEdit={editingEntry}
+        timesheetTotalHours={timesheet.totalHours}
       />
 
       <DeleteConfirmModal

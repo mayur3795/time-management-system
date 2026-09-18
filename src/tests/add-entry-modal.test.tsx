@@ -63,10 +63,41 @@ describe('AddEntryModal Form Validation', () => {
         projectId: 'proj-1',
         workType: 'Bug fixes',
         description: 'Revamp hero section banner',
-        hours: 4,
+        hours: 0.5,
         date: '2024-01-22',
       });
       expect(handleClose).toHaveBeenCalled();
     });
+  });
+
+  it('displays error when total weekly hours would exceed 40 hours', async () => {
+    const handleSubmit = vi.fn();
+    const handleClose = vi.fn();
+
+    render(
+      <AddEntryModal
+        isOpen={true}
+        onClose={handleClose}
+        onSubmit={handleSubmit}
+        projects={mockProjects}
+        selectedDate="2024-01-22"
+        timesheetTotalHours={40}
+      />
+    );
+
+    const projectSelect = screen.getByLabelText(/select project/i);
+    fireEvent.change(projectSelect, { target: { value: 'proj-1' } });
+
+    const descTextarea = screen.getByPlaceholderText(/write text here/i);
+    fireEvent.change(descTextarea, { target: { value: 'Extra task' } });
+
+    const submitButton = screen.getByRole('button', { name: /add entry/i });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(/total weekly hours cannot exceed 40 hours/i)).toBeInTheDocument();
+    });
+
+    expect(handleSubmit).not.toHaveBeenCalled();
   });
 });
