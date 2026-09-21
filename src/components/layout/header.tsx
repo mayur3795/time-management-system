@@ -32,7 +32,7 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-3.5 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4 sm:gap-8">
           <Link href="/timesheets" className="flex items-center gap-2 outline-none select-none">
-            <span className="text-xl font-bold tracking-tight text-[#0F172A]">
+            <span className="text-[24px] font-bold tracking-tight text-text-default">
               ticktock
             </span>
           </Link>
@@ -42,7 +42,7 @@ export function Header() {
               href="/timesheets"
               className={`text-sm font-medium transition-colors py-1 px-1.5 rounded focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
                 pathname.startsWith('/timesheets')
-                  ? 'text-[#0F172A] font-semibold'
+                  ? 'text-text-default font-semibold'
                   : 'text-slate-500 hover:text-slate-900'
               }`}
             >
