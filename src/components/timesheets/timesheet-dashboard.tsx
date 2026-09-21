@@ -114,7 +114,7 @@ export function TimesheetDashboard() {
     <div className="mx-auto max-w-6xl space-y-6">
       <Card className="p-4 sm:p-6 md:p-8 border-0 shadow-xs">
         <div className="mb-5 sm:mb-6">
-          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#0F172A]">
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-text-default">
             Your Timesheets
           </h1>
         </div>
