@@ -123,7 +123,7 @@ function EntryForm({
   return (
     <>
       <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
-        <h2 id="modalTitle" className="text-lg md:text-xl font-bold text-[#0F172A]">
+        <h2 id="modalTitle" className="text-lg md:text-xl font-bold text-text-default">
           {isEditing ? 'Edit Entry' : 'Add New Entry'}
         </h2>
         <Button
@@ -151,7 +151,7 @@ function EntryForm({
         <div>
           <label
             htmlFor="projectSelect"
-            className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1.5"
+            className="flex items-center gap-1.5 text-sm font-semibold text-text-default mb-1.5"
           >
             <span>Select Project</span>
             <span className="text-red-500">*</span>
@@ -188,7 +188,7 @@ function EntryForm({
         <div>
           <label
             htmlFor="workTypeSelect"
-            className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1.5"
+            className="flex items-center gap-1.5 text-sm font-semibold text-text-default mb-1.5"
           >
             <span>Type of Work</span>
             <span className="text-red-500">*</span>
@@ -224,7 +224,7 @@ function EntryForm({
         <div>
           <label
             htmlFor="taskDescription"
-            className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1.5"
+            className="flex items-center gap-1.5 text-sm font-semibold text-text-default mb-1.5"
           >
             <span>Task description</span>
             <span className="text-red-500">*</span>
@@ -245,14 +245,14 @@ function EntryForm({
                 : 'border-slate-200 focus:border-blue-500 focus:ring-blue-500/20'
             }`}
           />
-          <p className="mt-1 text-[11px] text-slate-600">A note for extra info</p>
+          <p className="mt-1 text-xs text-slate-500">A note for extra info</p>
           {errors.description && (
             <p className="mt-1 text-xs text-red-600">{errors.description}</p>
           )}
         </div>
 
         <div>
-          <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1.5">
+          <label className="flex items-center gap-1.5 text-sm font-semibold text-text-default mb-1.5">
             <span>Hours</span>
             <span className="text-red-500">*</span>
           </label>
