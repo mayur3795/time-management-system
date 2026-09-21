@@ -165,7 +165,7 @@ export function TimesheetDetailView({ id }: TimesheetDetailViewProps) {
           <div className="rounded-xl border-0 bg-white p-4 sm:p-6 md:p-8 shadow-xs min-h-125">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 sm:pb-8 mb-6 sm:mb-8 border-b border-slate-100 min-h-16">
               <div>
-                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0F172A]">
+                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-text-default">
                   This week&apos;s timesheet
                 </h1>
                 <p className="text-xs text-slate-600 font-normal mt-1">
@@ -189,7 +189,7 @@ export function TimesheetDetailView({ id }: TimesheetDetailViewProps) {
                     className="flex flex-col sm:flex-row gap-2 sm:gap-6 border-b border-slate-100 pb-6 sm:pb-8 last:border-b-0 min-h-30"
                   >
                     <div className="w-full sm:w-36 shrink-0">
-                      <span className="text-xs sm:text-sm font-semibold text-[#0F172A]">
+                      <span className="text-xs sm:text-sm font-semibold text-text-default">
                         {formatShortDate(dayDate)}
                       </span>
                     </div>
