@@ -43,7 +43,7 @@ export function TimesheetTaskItem({
             {entry.hours} {entry.hours === 1 ? 'hr' : 'hrs'}
           </span>
 
-          <span className="inline-flex items-center rounded-xl bg-[#E1EFFE] px-2.5 sm:px-3.5 py-0.5 sm:py-1 text-xs sm:text-sm font-medium text-[#1E429F] whitespace-nowrap">
+          <span className="inline-flex items-center rounded-md bg-[#E1EFFE] px-2.5 sm:px-3.5 py-0.5 sm:py-1 text-xs sm:text-sm font-medium text-[#1E429F] whitespace-nowrap">
             {entry.projectName}
           </span>
         </div>
@@ -64,7 +64,9 @@ export function TimesheetTaskItem({
           {menuOpen && (
             <div
               role="menu"
-              className="absolute right-0 top-full mt-1 w-28 rounded-lg border border-slate-100 bg-white p-1 shadow-lg ring-1 ring-black/5 z-30 animate-in fade-in-50 zoom-in-95"
+              className="absolute right-0 top-full mt-1 w-28 rounded-lg border border-slate-100 bg-white p-1 box-shadow:
+  0px 2px 4px -2px #0000000D,
+  0px 4px 6px -1px #0000001A; ring-1 ring-black/5 z-30 animate-in fade-in-50 zoom-in-95"
             >
               <Button
                 variant="ghost"
@@ -74,7 +76,7 @@ export function TimesheetTaskItem({
                   setMenuOpen(false);
                   onEdit(entry);
                 }}
-                className="w-full justify-start rounded px-2.5 py-1.5 text-xs text-slate-700 hover:bg-slate-50 font-normal"
+                className="w-full justify-start rounded px-2.5 py-1.5 text-[14px] text-slate-700 hover:bg-slate-50 font-normal"
               >
                 <span>Edit</span>
               </Button>
@@ -87,7 +89,7 @@ export function TimesheetTaskItem({
                   setMenuOpen(false);
                   onDelete(entry);
                 }}
-                className="w-full justify-start rounded px-2.5 py-1.5 text-xs text-red-600 hover:bg-red-50 hover:text-red-700 font-normal"
+                className="w-full justify-start rounded px-2.5 py-1.5 text-[14px] text-red-600 hover:bg-red-50 hover:text-red-700 font-normal"
               >
                 <span>Delete</span>
               </Button>
